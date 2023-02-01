@@ -350,6 +350,16 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse, centre, satellites;
+let color1,
+  color2,
+  ballColor,
+  squareColor,
+  rectColor,
+  cBallColor,
+  cSquareColor,
+  cRectColor,
+  dragging,
+  dragBall;
 mouse = { x: -100, y: -100 };
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -363,20 +373,67 @@ window.addEventListener("resize", function () {
   maxify();
 });
 
+window.addEventListener("mousedown", function (evt) {
+  if (
+    isPointInsideCircle(
+      mouse.x,
+      mouse.y,
+      dragBall.x,
+      dragBall.y,
+      dragBall.radius
+    )
+  ) {
+    dragging = true;
+  }
+});
+
+window.addEventListener("mouseup", function () {
+  dragging = false;
+});
+
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
+class Circle {
+  constructor(x = endX() - 150, y = endY() - 150, r = 20, color = "purple") {
+    this.x = x;
+    this.y = y;
+    this.radius = r;
+    this.color = color;
+  }
+
+  draw() {
+    drawBall(this.x, this.y, this.radius, 1, this.color, this.color);
+  }
+
+  changeWithMouse() {
+    this.x = mouse.x;
+    this.y = mouse.y;
+  }
+
+  update() {
+    if (dragging) {
+      console.log("true");
+      this.changeWithMouse();
+    }
+    this.draw();
+  }
+}
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
-let color1 = "red";
-let color2 = "green";
-let ballColor, squareColor, rectColor;
+color1 = "red";
+color2 = "green";
+ballColor, squareColor, rectColor;
+cBallColor, cSquareColor, cRectColor;
+dragging = false;
+dragBall = new Circle();
 
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("white");
 
   ballColor = squareColor = rectColor = color1;
+  cBallColor = cSquareColor = cRectColor = color1;
 
   if (isPointInsideCircle(mouse.x, mouse.y, 150, 150, 80)) {
     ballColor = color2;
@@ -393,5 +450,11 @@ function animate() {
   drawBall(150, 150, 80, 1, ballColor, ballColor);
   fillRectangle(350, 80, 150, 150, squareColor, 1);
   fillRectangle(650, 80, 300, 150, rectColor);
+
+  drawBall(150, 450, 80, 1, cBallColor, cBallColor);
+  fillRectangle(350, 400, 150, 150, cSquareColor, 1);
+  fillRectangle(650, 400, 300, 150, cRectColor);
+
+  dragBall.update();
 }
 animate();
