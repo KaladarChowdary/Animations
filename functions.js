@@ -327,4 +327,22 @@ function fillRectangle(
 
 // TESTING ALL THE FUNCTIONS
 
-// create one thousand circles within canvas
+// LATEST FUNCTIONS
+function newX(x, y, r, theta = 0) {
+  return x + r * Math.cos(theta);
+}
+
+function newY(x, y, r, theta = 0) {
+  return y - r * Math.sin(theta);
+}
+
+function arrayOfObjects(n, clas) {
+  let i, arr;
+  arr = [];
+
+  for (i = 0; i < n; i++) {
+    arr.push(new clas());
+  }
+
+  return arr;
+}
