@@ -251,26 +251,27 @@ function hypot(x, y) {
   return Math.sqrt(x * x, y * y);
 }
 
-function doesCircleSquareIntersect(cX, cY, cR, x2, y2, size2) {
-  return !(
+function noCircleSquareIntersection(cX, cY, cR, x2, y2, size2) {
+  let flag =
     cX + cR < x2 ||
     cX - cR > x2 + size2 ||
     cY + cR < y2 ||
-    cY - cR > y2 + size2 ||
-    getDistance(cX, cY, x2 + size2 / 2, y2 + size2 / 2) >
-      cR + hypot(size2, size2) / 2
-  );
+    cY - cR > y2 + size2;
+
+  return flag;
 }
 
-function doesCircleRectangleIntersect(cX, cY, cR, x2, y2, length2, breadth2) {
-  return !(
+function noBallRectangleIntersection(cX, cY, cR, x2, y2, length2, breadth2) {
+  return (
     cX + cR < x2 ||
     cX - cR > x2 + length2 ||
     cY + cR < y2 ||
-    cY - cR > y2 + breadth2 ||
-    getDistance(cX, cY, x2 + length2 / 2, y2 + breadth2 / 2) >
-      cR + hypot(length2, breadth2) / 2
+    cY - cR > y2 + breadth2
   );
+}
+
+function doesBallBallIntersect(x1, y1, r1, x2, y2, r2) {
+  return getDistance(x1, y1, x2, y2) <= r1 + r2;
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -412,7 +413,6 @@ class Circle {
 
   update() {
     if (dragging) {
-      console.log("true");
       this.changeWithMouse();
     }
     this.draw();
@@ -431,6 +431,7 @@ dragBall = new Circle();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("white");
+  dragBall.update();
 
   ballColor = squareColor = rectColor = color1;
   cBallColor = cSquareColor = cRectColor = color1;
@@ -451,10 +452,40 @@ function animate() {
   fillRectangle(350, 80, 150, 150, squareColor, 1);
   fillRectangle(650, 80, 300, 150, rectColor);
 
+  if (
+    doesBallBallIntersect(dragBall.x, dragBall.y, dragBall.radius, 150, 450, 80)
+  ) {
+    cBallColor = color2;
+  }
   drawBall(150, 450, 80, 1, cBallColor, cBallColor);
+  if (
+    !noCircleSquareIntersection(
+      dragBall.x,
+      dragBall.y,
+      dragBall.radius,
+      350,
+      400,
+      150
+    )
+  ) {
+    console.log("intersection");
+    cSquareColor = color2;
+  }
   fillRectangle(350, 400, 150, 150, cSquareColor, 1);
-  fillRectangle(650, 400, 300, 150, cRectColor);
 
-  dragBall.update();
+  if (
+    !noBallRectangleIntersection(
+      dragBall.x,
+      dragBall.y,
+      dragBall.radius,
+      650,
+      400,
+      300,
+      150
+    )
+  ) {
+    cRectColor = color2;
+  }
+  fillRectangle(650, 400, 300, 150, cRectColor);
 }
 animate();
