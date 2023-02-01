@@ -13,7 +13,7 @@ window.addEventListener("mousemove", function (evt) {
 // FUNCTIONS RELATED TO CANVAS X AND Y
 
 // Sets canvas width 10 less than window width. Complete canvas lies inside windows
-function maxify(cutBy = 10) {
+function maxify(cutBy = 5) {
   canvas.width = window.innerWidth - cutBy;
   canvas.height = window.innerHeight - cutBy;
 }
