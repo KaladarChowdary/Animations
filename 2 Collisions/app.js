@@ -250,7 +250,7 @@ function getAngleInDegrees(x1, y1, x2, y2) {
 function hypot(x, y) {
   return Math.sqrt(x * x, y * y);
 }
-
+// Both need to be updated not 100% correct
 function noCircleSquareIntersection(cX, cY, cR, x2, y2, size2) {
   let flag =
     cX + cR < x2 ||
@@ -260,7 +260,7 @@ function noCircleSquareIntersection(cX, cY, cR, x2, y2, size2) {
 
   return flag;
 }
-
+// Both need to be updated not 100% correct
 function noBallRectangleIntersection(cX, cY, cR, x2, y2, length2, breadth2) {
   return (
     cX + cR < x2 ||
@@ -431,7 +431,6 @@ dragBall = new Circle();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("white");
-  dragBall.update();
 
   ballColor = squareColor = rectColor = color1;
   cBallColor = cSquareColor = cRectColor = color1;
@@ -487,5 +486,7 @@ function animate() {
     cRectColor = color2;
   }
   fillRectangle(650, 400, 300, 150, cRectColor);
+
+  dragBall.update();
 }
 animate();
