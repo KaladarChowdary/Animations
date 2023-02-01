@@ -215,13 +215,10 @@ function giveCoordinatesArray(size, gap) {
 // getQuadrant of x2,y2 with x1, y1 as origin
 // Use canvas coordinate system
 function getQuadrant(x1, y1, x2, y2) {
-  if (x2 > x1 && y2 <= y1) return 1;
+  if (x2 >= x1 && y2 <= y1) return 1;
   else if (x2 <= x1 && y2 < y1) return 2;
   else if (x2 < x1 && y2 >= y1) return 3;
   else if (x2 >= x1 && y2 > y1) return 4;
-  else {
-    console.log(x1, y1, x2, y2);
-  }
 }
 
 // Give actual theta with respect to quadrant
@@ -353,7 +350,7 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse, centre, satellites;
-mouse = { x: 0, y: 0 };
+mouse = { x: middleX(), y: middleY() };
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -366,12 +363,13 @@ window.addEventListener("resize", function () {
   maxify();
   centre = new Centre();
   satellites = arrayOfObjects(500, Satellite);
+  mouse = { x: middleX(), y: middleY() };
 });
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
 class Centre {
-  constructor(x = middleX(), y = middleY(), radius = 3, color = "white") {
+  constructor(x = middleX(), y = middleY(), radius = 3, color = "black") {
     this.x = x;
     this.y = y;
     this.radius = radius;
@@ -379,10 +377,6 @@ class Centre {
 
     this.distanceToMouse = undefined;
     this.angleToMouse = undefined;
-  }
-
-  draw() {
-    drawBall(this.x, this.y, this.radius, 1, this.color, this.color);
   }
 
   setPositionToMouse() {
@@ -402,24 +396,22 @@ class Centre {
     this.getDistanceToMouse();
     this.getAngleToMouse();
 
-    if (this.distanceToMouse > 2) {
-      this.x = this.x + 2 * Math.cos(this.angleToMouse);
-      this.y = this.y - 2 * Math.sin(this.angleToMouse);
+    if (this.distanceToMouse > 5) {
+      this.x = this.x + 5 * Math.cos(this.angleToMouse);
+      this.y = this.y - 5 * Math.sin(this.angleToMouse);
     }
   }
 
   update() {
-    // this.followMouseSlowly();
-    // this.setPositionToMouse();
-    this.draw();
+    this.followMouseSlowly();
   }
 }
 
 class Satellite {
   constructor() {
-    this.distance = randRange(50, 250);
+    this.distance = randRange(50, 350);
     this.angle = randRange(0, 2 * Math.PI);
-    this.angleSpeed = randRange(0.03, 0.05);
+    this.angleSpeed = randRange(0.02, 0.03);
 
     this.color = randomColor();
     this.x = newX(centre.x, centre.y, this.distance, this.angle);
@@ -458,11 +450,11 @@ class Satellite {
 // ANIMATE
 
 centre = new Centre();
-satellites = arrayOfObjects(500, Satellite);
+satellites = arrayOfObjects(1000, Satellite);
 
 function animate() {
   requestAnimationFrame(animate);
-  fillCanvas("rgba(0,0,0, 0.5)");
+  fillCanvas("rgba(0,0,0, 0.1)");
 
   updateArray(satellites);
   centre.update();
