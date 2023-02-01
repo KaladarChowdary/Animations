@@ -362,7 +362,7 @@ window.addEventListener("mousemove", function (evt) {
 window.addEventListener("resize", function () {
   maxify();
   centre = new Centre();
-  satellites = arrayOfObjects(500, Satellite);
+  satellites = arrayOfObjects(1000, Satellite);
   mouse = { x: middleX(), y: middleY() };
 });
 
@@ -413,7 +413,8 @@ class Satellite {
     this.angle = randRange(0, 2 * Math.PI);
     this.angleSpeed = randRange(0.02, 0.03);
 
-    this.color = randomColor();
+    this.color = randItem(["#F2CD5C", "#F2921D", "#A61F69", "#400E32"]);
+    // this.color = randomColor();
     this.x = newX(centre.x, centre.y, this.distance, this.angle);
 
     this.y = newY(centre.x, centre.y, this.distance, this.angle);
