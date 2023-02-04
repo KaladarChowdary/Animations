@@ -436,6 +436,11 @@ class Ball {
   }
 
   update() {
+    if (this.detectCollision()) {
+      this.color = "red";
+    } else {
+      this.color = "black";
+    }
     this.bounceOnCollision();
     this.updateXY();
     this.draw();
