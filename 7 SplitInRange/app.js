@@ -356,7 +356,7 @@ maxify();
 let mouse, ball, ballObject, ballCount;
 ballObject = {};
 ballCount = 0;
-mouse = { x: 0, y: 0, radius: 30 };
+mouse = { x: 0, y: 0, radius: 50 };
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -465,18 +465,14 @@ class Ball {
   }
 
   draw() {
-    if (this.radius > 2) {
-      drawBall(
-        this.x,
-        this.y,
-        this.radius,
-        this.linewidth,
-        this.fillColor,
-        this.lineColor
-      );
-    } else {
-      drawLineSegment(this.oldx, this.oldy, this.x, this.y, this.color, 1);
-    }
+    drawBall(
+      this.x,
+      this.y,
+      this.radius,
+      this.linewidth,
+      this.fillColor,
+      this.lineColor
+    );
   }
 
   updateLimit() {
