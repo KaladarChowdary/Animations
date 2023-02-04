@@ -395,6 +395,15 @@ class Ball {
     this.next = false;
   }
 
+  detectFirstCollision() {
+    return this.prev === false && this.next === true;
+  }
+
+  updatePrevNext() {
+    this.prev = this.next;
+    this.next = this.detectCollision();
+  }
+
   detectCollision() {
     return doesCircleCircleIntersect(
       this.x,
@@ -437,13 +446,7 @@ class Ball {
   }
 
   update() {
-    if (this.detectCollision()) {
-      ball.lineColor = "red";
-      ball.fillColor = "red";
-    } else {
-      ball.lineColor = "black";
-      ball.fillColor = "black";
-    }
+    this.updatePrevNext();
     this.bounceOnCollision();
     this.updateXY();
     this.draw();
