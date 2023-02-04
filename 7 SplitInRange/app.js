@@ -392,6 +392,20 @@ class Ball {
     this.y += this.dy;
   }
 
+  bounceOnCollision() {
+    if (this.x + this.radius >= canvas.width) {
+      this.dx = negative(this.dx);
+    } else if (this.x - this.radius <= 0) {
+      this.dx = positive(this.dx);
+    }
+
+    if (this.y + this.radius >= canvas.height) {
+      this.dy = negative(this.dy);
+    } else if (this.y - this.radius <= 0) {
+      this.dy = positive(this.dy);
+    }
+  }
+
   draw() {
     drawBall(
       this.x,
@@ -404,6 +418,7 @@ class Ball {
   }
 
   update() {
+    this.bounceOnCollision();
     this.updateXY();
     this.draw();
   }
