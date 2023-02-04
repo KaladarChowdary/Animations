@@ -385,6 +385,9 @@ class Ball {
 
     this.dx = dx;
     this.dy = dy;
+
+    this.prev = false;
+    this.next = false;
   }
 
   updateXY() {
