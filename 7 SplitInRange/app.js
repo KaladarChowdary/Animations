@@ -373,6 +373,7 @@ window.addEventListener("resize", function () {
 // CLASSES
 class Ball {
   constructor(
+    i,
     x = middleX(),
     y = middleY(),
     radius = 90,
@@ -383,6 +384,7 @@ class Ball {
     dx = 1,
     dy = 1
   ) {
+    this.i = i;
     this.x = x;
     this.y = y;
     this.radius = radius;
