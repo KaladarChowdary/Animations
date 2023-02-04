@@ -466,17 +466,21 @@ class Ball {
 
   updateLimit() {
     this.limit -= 1;
+    this.limit = Math.max(0, this.limit);
   }
 
   update() {
+    this.updateLimit();
     this.updatePrevNext();
 
     if (this.detectFirstCollision()) {
       this.lineColor = "red";
       this.fillColor = "red";
-      this.createChild(this.dx, this.dy + 1);
-      this.createChild(this.dx, this.dy - 1);
-      delete ballObject[this.i];
+      if (this.limit === 0) {
+        this.createChild(this.dx, this.dy + 1);
+        this.createChild(this.dx, this.dy - 1);
+        delete ballObject[this.i];
+      }
     } else {
       this.lineColor = "black";
       this.fillColor = "black";
