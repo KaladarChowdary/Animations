@@ -453,6 +453,26 @@ class Ball {
     if (this.detectFirstCollision()) {
       this.lineColor = "red";
       this.fillColor = "red";
+      createNewBallObject(
+        this.x,
+        this.y,
+        this.radius / 2,
+        this.linewidth,
+        this.lineColor,
+        this.fillColor,
+        2 * this.dx,
+        this.dy
+      );
+      createNewBallObject(
+        this.x,
+        this.y,
+        this.radius / 2,
+        this.linewidth,
+        this.lineColor,
+        this.fillColor,
+        -2 * this.dx,
+        this.dy
+      );
     } else {
       this.lineColor = "black";
       this.fillColor = "black";
