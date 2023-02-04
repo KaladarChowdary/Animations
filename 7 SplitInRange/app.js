@@ -344,12 +344,16 @@ function fillRectangle(
   ctx.closePath();
 }
 
+function doesCircleCircleIntersect(x1, y1, r1, x2, y2, r2) {
+  return getDistance(x1, y1, x2, y2) < r1 + r2;
+}
+
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // VARIABLE DECLARATIONS
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
-mouse = { x: middleX(), y: middleY() };
+mouse = { x: middleX(), y: middleY(), radius: 30 };
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -388,6 +392,17 @@ class Ball {
 
     this.prev = false;
     this.next = false;
+  }
+
+  detectCollision() {
+    return doesCircleCircleIntersect(
+      this.x,
+      this.y,
+      this.radius,
+      mouse.x,
+      mouse.y,
+      mouse.radius
+    );
   }
 
   updateXY() {
@@ -436,6 +451,13 @@ function animate() {
   fillCanvas("white");
 
   temp.update();
-  drawBall(mouse.x, mouse.y, 30, 0, "rgba(0,0,0,0.15)", "rgba(0,0,0,0.15)");
+  drawBall(
+    mouse.x,
+    mouse.y,
+    mouse.radius,
+    0,
+    "rgba(0,0,0,0.15)",
+    "rgba(0,0,0,0.15)"
+  );
 }
 animate();
