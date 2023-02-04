@@ -392,6 +392,9 @@ class Ball {
     this.lineColor = lineColor;
     this.fillColor = fillColor;
 
+    this.oldx = this.x;
+    this.oldy = this.y;
+
     this.dx = dx;
     this.dy = dy;
 
