@@ -465,6 +465,8 @@ class Ball {
         2 * this.dx,
         this.dy
       );
+
+      delete ballObject[this.i];
     } else {
       this.lineColor = "black";
       this.fillColor = "black";
@@ -491,6 +493,7 @@ function createNewBallObject(
   dy = 1
 ) {
   ballObject[ballCount] = new Ball(
+    ballCount,
     x,
     y,
     radius,
