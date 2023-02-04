@@ -401,14 +401,20 @@ class Ball {
     this.limit = 10;
   }
 
+  createMultipleChildren() {
+    this.createChild(this.dx + 0.5, positive(this.dy + 0.5));
+    this.createChild(this.dx + 0.5, negative(this.dy + 0.5));
+  }
+
   createChild(dx = this.dx, dy = this.dy) {
+    color = randomColor();
     createNewBallObject(
       this.x,
       this.y,
-      this.radius / 2,
+      (2 * this.radius) / 3,
       this.linewidth,
-      this.lineColor,
-      this.fillColor,
+      color,
+      color,
       dx,
       dy
     );
@@ -477,9 +483,7 @@ class Ball {
       this.lineColor = "red";
       this.fillColor = "red";
       if (this.limit === 0 && this.radius >= 2) {
-        this.createChild(this.dx + 1, positive(this.dy + 1));
-        this.createChild(this.dx + 1, negative(this.dy + 1));
-
+        this.createMultipleChildren();
         delete ballObject[this.i];
       }
     } else {
