@@ -397,6 +397,8 @@ class Ball {
 
     this.prev = false;
     this.next = false;
+
+    this.limit = 100;
   }
 
   createChild(dx = 2 * this.dx, dy = 2 * this.dy) {
