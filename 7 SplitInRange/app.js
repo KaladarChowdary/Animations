@@ -444,6 +444,8 @@ class Ball {
   }
 
   updateXY() {
+    this.oldx = this.x;
+    this.oldy = this.y;
     this.x += this.dx;
     this.y += this.dy;
   }
