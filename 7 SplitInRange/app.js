@@ -401,16 +401,16 @@ class Ball {
     this.limit = 50;
   }
 
-  createChild(x = this.x, y = this.y) {
+  createChild(dx = this.dx, dy = this.dy) {
     createNewBallObject(
-      x,
-      y,
+      this.dy,
+      this.dx,
       this.radius / 2,
       this.linewidth,
       this.lineColor,
       this.fillColor,
-      this.dx,
-      this.dy
+      dx,
+      dy
     );
   }
 
@@ -477,8 +477,8 @@ class Ball {
       this.lineColor = "red";
       this.fillColor = "red";
       if (this.limit === 0 && this.radius > 5) {
-        this.createChild(this.x, this.y + 10);
-        this.createChild(this.x, this.y - 10);
+        this.createChild(this.dx + 1, positive(this.dy + 1));
+        this.createChild(this.dx + 1, negative(this.dy + 1));
         delete ballObject[this.i];
       }
     } else {
