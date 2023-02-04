@@ -467,12 +467,12 @@ class Ball {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-ball = new Ball();
+ballObject[ballCount] = new Ball();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("white");
 
-  ball.update();
+  updateObject(ballObject);
   drawBall(
     mouse.x,
     mouse.y,
