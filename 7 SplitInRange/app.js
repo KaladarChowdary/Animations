@@ -398,13 +398,13 @@ class Ball {
     this.prev = false;
     this.next = false;
 
-    this.limit = 50;
+    this.limit = 10;
   }
 
   createChild(dx = this.dx, dy = this.dy) {
     createNewBallObject(
-      this.dy,
-      this.dx,
+      this.x,
+      this.y,
       this.radius / 2,
       this.linewidth,
       this.lineColor,
@@ -476,9 +476,10 @@ class Ball {
     if (this.detectFirstCollision()) {
       this.lineColor = "red";
       this.fillColor = "red";
-      if (this.limit === 0 && this.radius > 5) {
+      if (this.limit === 0 && this.radius >= 2) {
         this.createChild(this.dx + 1, positive(this.dy + 1));
         this.createChild(this.dx + 1, negative(this.dy + 1));
+
         delete ballObject[this.i];
       }
     } else {
