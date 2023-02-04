@@ -398,7 +398,7 @@ class Ball {
     this.prev = false;
     this.next = false;
 
-    this.limit = 100;
+    this.limit = 50;
   }
 
   createChild(dx = 2 * this.dx, dy = 2 * this.dy) {
@@ -476,9 +476,9 @@ class Ball {
     if (this.detectFirstCollision()) {
       this.lineColor = "red";
       this.fillColor = "red";
-      if (this.limit === 0) {
-        this.createChild(this.dx, this.dy + 1);
-        this.createChild(this.dx, this.dy - 1);
+      if (this.limit === 0 && this.radius > 5) {
+        this.createChild(2 * this.dx, 2 * this.dy);
+        this.createChild(2 * this.dx, -2 * this.dy);
         delete ballObject[this.i];
       }
     } else {
