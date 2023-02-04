@@ -451,11 +451,11 @@ class Ball {
     this.updatePrevNext();
 
     if (this.detectFirstCollision()) {
-      ball.lineColor = "red";
-      ball.fillColor = "red";
+      this.lineColor = "red";
+      this.fillColor = "red";
     } else {
-      ball.lineColor = "black";
-      ball.fillColor = "black";
+      this.lineColor = "black";
+      this.fillColor = "black";
     }
 
     this.bounceOnCollision();
