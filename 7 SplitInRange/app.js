@@ -353,7 +353,7 @@ function doesCircleCircleIntersect(x1, y1, r1, x2, y2, r2) {
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
-let mouse, ball;
+let mouse, ball, ballObject;
 mouse = { x: middleX(), y: middleY(), radius: 30 };
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
