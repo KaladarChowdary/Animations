@@ -468,8 +468,8 @@ class Ball {
     if (this.detectFirstCollision()) {
       this.lineColor = "red";
       this.fillColor = "red";
-      this.createChild(undefined, 2 * this.dy + 10);
-      this.createChild(undefined, 2 * this.dy - 10);
+      this.createChild(this.dx, this.dy + 1);
+      this.createChild(this.dx, this.dy - 1);
       delete ballObject[this.i];
     } else {
       this.lineColor = "black";
