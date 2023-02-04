@@ -399,6 +399,19 @@ class Ball {
     this.next = false;
   }
 
+  createChild() {
+    createNewBallObject(
+      this.x,
+      this.y,
+      this.radius / 2,
+      this.linewidth,
+      this.lineColor,
+      this.fillColor,
+      2 * this.dx,
+      2 * this.dy
+    );
+  }
+
   detectFirstCollision() {
     return this.prev === false && this.next === true;
   }
@@ -455,16 +468,6 @@ class Ball {
     if (this.detectFirstCollision()) {
       this.lineColor = "red";
       this.fillColor = "red";
-      createNewBallObject(
-        this.x,
-        this.y,
-        this.radius / 2,
-        this.linewidth,
-        this.lineColor,
-        this.fillColor,
-        2 * this.dx,
-        this.dy
-      );
 
       delete ballObject[this.i];
     } else {
