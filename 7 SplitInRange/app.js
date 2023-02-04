@@ -399,7 +399,7 @@ class Ball {
     this.next = false;
   }
 
-  createChild() {
+  createChild(dx = 2 * this.dx, dy = 2 * this.dy) {
     createNewBallObject(
       this.x,
       this.y,
@@ -407,8 +407,8 @@ class Ball {
       this.linewidth,
       this.lineColor,
       this.fillColor,
-      2 * this.dx,
-      2 * this.dy
+      dx,
+      dy
     );
   }
 
