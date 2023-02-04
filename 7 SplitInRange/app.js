@@ -356,7 +356,7 @@ maxify();
 let mouse, ball, ballObject, ballCount;
 ballObject = {};
 ballCount = 0;
-mouse = { x: middleX(), y: middleY(), radius: 30 };
+mouse = { x: 0, y: 0, radius: 30 };
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
