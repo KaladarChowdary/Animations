@@ -467,7 +467,12 @@ class Ball {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-ballObject[ballCount] = new Ball();
+function createNewBallObject() {
+  ballObject[ballCount] = new Ball();
+  ballCount++;
+}
+
+createNewBallObject();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("white");
