@@ -485,7 +485,7 @@ class Ball {
     this.updatePrevNext();
 
     if (this.detectFirstCollision()) {
-      if (this.limit === 0 && this.radius >= 2) {
+      if (this.limit === 0 && this.radius >= 5) {
         this.createMultipleChildren();
         delete ballObject[this.i];
       }
