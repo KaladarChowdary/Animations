@@ -464,6 +464,10 @@ class Ball {
     );
   }
 
+  updateLimit() {
+    this.limit -= 1;
+  }
+
   update() {
     this.updatePrevNext();
 
