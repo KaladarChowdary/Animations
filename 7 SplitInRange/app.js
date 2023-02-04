@@ -407,7 +407,7 @@ class Ball {
   }
 
   createChild(dx = this.dx, dy = this.dy) {
-    color = randomColor();
+    let color = randomColor();
     createNewBallObject(
       this.x,
       this.y,
@@ -480,15 +480,10 @@ class Ball {
     this.updatePrevNext();
 
     if (this.detectFirstCollision()) {
-      this.lineColor = "red";
-      this.fillColor = "red";
       if (this.limit === 0 && this.radius >= 2) {
         this.createMultipleChildren();
         delete ballObject[this.i];
       }
-    } else {
-      this.lineColor = "black";
-      this.fillColor = "black";
     }
 
     this.bounceOnCollision();
