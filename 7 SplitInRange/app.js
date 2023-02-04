@@ -402,9 +402,9 @@ class Ball {
   }
 
   createMultipleChildren() {
-    this.createChild(positive(this.dx) + 0.5, positive(dy) + 0.5);
+    this.createChild(this.dx, positive(this.dy));
 
-    this.createChild(negative(dx) - 0.5, negative(dy) - 0.5);
+    this.createChild(this.dx, negative(this.dy));
   }
 
   createChild(dx = this.dx, dy = this.dy) {
