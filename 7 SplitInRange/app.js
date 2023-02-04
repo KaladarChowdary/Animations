@@ -477,8 +477,8 @@ class Ball {
       this.lineColor = "red";
       this.fillColor = "red";
       if (this.limit === 0 && this.radius > 5) {
-        this.createChild(2 * this.dx, 2 * this.dy);
-        this.createChild(2 * this.dx, -2 * this.dy);
+        this.createChild(this.dx, this.dy);
+        this.createChild(this.dx, this.dy);
         delete ballObject[this.i];
       }
     } else {
@@ -503,8 +503,8 @@ function createNewBallObject(
   lineColor = "black",
   fillColor = "black",
 
-  dx = 1,
-  dy = 1
+  dx = randRange(3, 5),
+  dy = randRange(3, 5)
 ) {
   ballObject[ballCount] = new Ball(
     ballCount,
