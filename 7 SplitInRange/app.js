@@ -155,7 +155,7 @@ function updateArray(arr) {
 }
 
 function updateObject(obj) {
-  for (const objt in Object.values(obj)) {
+  for (const objt of Object.values(obj)) {
     objt.update();
   }
 }
@@ -473,6 +473,7 @@ function animate() {
   fillCanvas("white");
 
   updateObject(ballObject);
+
   drawBall(
     mouse.x,
     mouse.y,
