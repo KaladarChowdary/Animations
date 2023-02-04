@@ -465,14 +465,18 @@ class Ball {
   }
 
   draw() {
-    drawBall(
-      this.x,
-      this.y,
-      this.radius,
-      this.linewidth,
-      this.fillColor,
-      this.lineColor
-    );
+    if (this.radius > 2) {
+      drawBall(
+        this.x,
+        this.y,
+        this.radius,
+        this.linewidth,
+        this.fillColor,
+        this.lineColor
+      );
+    } else {
+      drawLineSegment(this.oldx, this.oldy, this.x, this.y, this.color, 1);
+    }
   }
 
   updateLimit() {
