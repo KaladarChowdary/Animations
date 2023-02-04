@@ -353,6 +353,7 @@ function doesCircleCircleIntersect(x1, y1, r1, x2, y2, r2) {
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
+let mouse, ball;
 mouse = { x: middleX(), y: middleY(), radius: 30 };
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -437,9 +438,9 @@ class Ball {
 
   update() {
     if (this.detectCollision()) {
-      this.color = "red";
+      ball.color = "red";
     } else {
-      this.color = "black";
+      ball.color = "black";
     }
     this.bounceOnCollision();
     this.updateXY();
@@ -450,12 +451,12 @@ class Ball {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-let temp = new Ball();
+ball = new Ball();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("white");
 
-  temp.update();
+  ball.update();
   drawBall(
     mouse.x,
     mouse.y,
