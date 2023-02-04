@@ -467,8 +467,27 @@ class Ball {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-function createNewBallObject() {
-  ballObject[ballCount] = new Ball();
+function createNewBallObject(
+  x = middleX(),
+  y = middleY(),
+  radius = 90,
+  linewidth = 1,
+  lineColor = "black",
+  fillColor = "black",
+
+  dx = 1,
+  dy = 1
+) {
+  ballObject[ballCount] = new Ball(
+    x,
+    y,
+    radius,
+    linewidth,
+    lineColor,
+    fillColor,
+    dx,
+    dy
+  );
   ballCount++;
 }
 
