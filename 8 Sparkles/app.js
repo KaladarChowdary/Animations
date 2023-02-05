@@ -349,9 +349,10 @@ function fillRectangle(
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
-let mouse, index, balls, setOfBalls;
+let mouse, balls, setOfBalls, index, index2;
 mouse = { x: middleX(), y: middleY() };
 index = 0;
+index2 = 0;
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -360,6 +361,11 @@ window.addEventListener("mousemove", function (evt) {
   mouse.y = evt.pageY;
 
   balls = createSparkles();
+});
+
+window.addEventListener("mouseover", function () {
+  setOfBalls[index2] = createSparkles();
+  index2++;
 });
 
 window.addEventListener("resize", function () {
