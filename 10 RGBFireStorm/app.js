@@ -368,7 +368,7 @@ class FireBall {
     y1 = endY(),
     x2 = 0,
     y2 = 0,
-    radius = 5,
+    radius = 10,
     color = "white"
   ) {
     this.x1 = x1;
@@ -377,14 +377,26 @@ class FireBall {
     this.y2 = y2;
     this.radius = radius;
     this.color = color;
-    getDxDy();
+    this.getDxDy();
+  }
+
+  updateXY() {
+    this.x += this.dx;
+    this.y += this.dy;
+  }
+
+  getDxDy() {
+    let theta = getAngle(this.x1, this.y1, this.x2, this.y2);
+    this.dx = Math.cos(theta);
+    this.dy = Math.sin(theta);
   }
 
   update() {
+    this.updateXY();
     this.draw();
   }
   draw() {
-    drawBall(this.x, this.y, this.radius, 1, this.color, this.color);
+    drawBall(this.x1, this.y1, this.radius, 1, this.color, this.color);
   }
 }
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
