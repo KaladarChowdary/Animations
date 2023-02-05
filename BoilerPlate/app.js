@@ -344,6 +344,16 @@ function fillRectangle(
   ctx.closePath();
 }
 
+function moveTo(x, targetX, step) {
+  if (x > targetX) {
+    return Math.max(x - step, targetX);
+  } else if (x < targetX) {
+    return Math.min(x + step, targetX);
+  } else {
+    return targetX;
+  }
+}
+
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // VARIABLE DECLARATIONS
 const canvas = document.querySelector("canvas");
