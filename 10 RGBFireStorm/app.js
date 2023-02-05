@@ -359,7 +359,7 @@ function moveTo(x, targetX, step) {
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
-let mouse = { x: middleX(), y: middleY() };
+let mouse = { x: -200, y: -200 };
 let temp;
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASS
@@ -406,10 +406,10 @@ class FireBall {
 
 class SquareCanon {
   constructor(
-    x = 200,
-    y = 200,
-    size = 30,
-    color = "green",
+    x = middleX() - 50,
+    y = middleY() - 50,
+    size = 100,
+    color = "black",
     x2 = 0,
     y2 = 0,
     radius = 10,
@@ -429,12 +429,16 @@ class SquareCanon {
     this.index = 0;
   }
 
-  runFunction(f) {
+  changeColor(object) {
+    object.color = randomColor();
+  }
+
+  runFunction(f = this.changeColor) {
     if (this.isMouseOnSquare()) {
       this.index++;
       if (this.index % this.interval === 0) {
         this.index = 0;
-        this.color = randomColor();
+        f(this);
       }
     }
   }
@@ -444,6 +448,7 @@ class SquareCanon {
   }
 
   update() {
+    this.runFunction();
     this.draw();
   }
   draw() {
@@ -474,7 +479,7 @@ window.addEventListener("resize", function () {
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
-temp = new SquareCanon(middleX() - 50, middleY() - 50, 100, "black");
+temp = new SquareCanon();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("white");
