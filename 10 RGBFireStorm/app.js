@@ -474,7 +474,7 @@ window.addEventListener("resize", function () {
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
-temp = new SquareCanon(middleX(), middleY());
+temp = new SquareCanon(middleX() - 50, middleY() - 50, 100, "black");
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("white");
