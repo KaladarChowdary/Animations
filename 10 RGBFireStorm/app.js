@@ -431,6 +431,12 @@ class SquareCanon {
     this.ballArray = [];
   }
 
+  updateBalls() {
+    for (let ball of this.ballArray) {
+      ball.update();
+    }
+  }
+
   changeColor(object) {
     object.color = randomColor();
   }
