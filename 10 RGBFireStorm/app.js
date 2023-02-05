@@ -404,7 +404,39 @@ class FireBall {
   }
 }
 
-class SquareCanon {}
+class SquareCanon {
+  constructor(
+    x = 200,
+    y = 200,
+    size = 30,
+    color = "green",
+    x2 = 0,
+    y2 = 0,
+    radius = 10,
+    speedFactor = 5,
+    interval = 100
+  ) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.color = color;
+
+    this.x2 = x2;
+    this.y2 = y2;
+    this.radius = radius;
+    this.speedFactor = speedFactor;
+    this.interval = interval;
+    this.index = 0;
+  }
+
+  draw() {
+    drawRectangle(this.x, this.y, this.size, this.size, this.color, 1);
+  }
+
+  update() {
+    this.draw;
+  }
+}
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
