@@ -467,7 +467,8 @@ function createSparkles() {
     dy,
     a,
     cutBy,
-    obj;
+    obj,
+    limit;
 
   obj = {};
   x = mouse.x;
@@ -475,14 +476,15 @@ function createSparkles() {
   lineColor = "white";
   fillColor = "white";
   lineWidth = 1;
-  a = 0.05;
-  cutBy = 0.01;
+  a = 0.02;
+  cutBy = 0.02;
+  limit = 50;
 
-  for (let i = 1; i <= 100; i++) {
-    radius = randRange(0.1, 1);
-    theta = (i / 100) * 2 * Math.PI;
-    dx = Math.cos(theta);
-    dy = -Math.sin(theta);
+  for (let i = 1; i <= limit; i++) {
+    radius = randRange(0.1, 2);
+    theta = (i / limit) * 2 * Math.PI;
+    dx = randRange(0.5, 2) * Math.cos(theta);
+    dy = randRange(0.5, 2) * -Math.sin(theta);
 
     obj[index] = new Ball(
       index,
@@ -507,7 +509,7 @@ let temp = [];
 let i = 1,
   time = 5;
 let i2 = 1,
-  time2 = 100;
+  time2 = 10;
 
 temp.push(createSparkles());
 
@@ -525,7 +527,7 @@ function animate() {
   }
   i++;
 
-  if (i2 % time2 === 0) {
+  if (temp.length >= 20 && i2 % time2 === 0) {
     i2 = 1;
     temp.shift();
   }
