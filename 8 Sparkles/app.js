@@ -467,8 +467,8 @@ function createSparkles() {
     obj;
 
   obj = {};
-  x = middleX();
-  y = middleY();
+  x = mouse.x;
+  y = mouse.y;
   lineColor = "white";
   fillColor = "white";
   lineWidth = 1;
