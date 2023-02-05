@@ -364,6 +364,48 @@ let red, green, blue, size, half, gap, Y, target, board;
 target = { x: middleX(), y: middleY() };
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASS
+class Board {
+  constructor(size = 450, x = middleX() - size / 2, y = 0) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+
+    this.centreX = this.x + this.size / 2;
+    this.centreY = this.x + this.size / 2;
+
+    this.r = 0;
+    this.g = 0;
+    this.b = 0;
+  }
+
+  changeColor(color = "black") {
+    if (color === "red") {
+      this.r += 5;
+    } else if (color === "green") {
+      this.g += 5;
+    } else if (color === "blue") {
+      this.b += 5;
+    }
+  }
+
+  update() {
+    this.draw();
+  }
+
+  draw() {
+    fillRectangle(
+      this.x,
+      this.y,
+      this.size,
+      this.size,
+      `rgb(${this.r}, ${this.g}, ${this.b})`,
+      "white",
+      1
+    );
+  }
+}
+board = new Board();
+
 class FireBall {
   constructor(
     x1 = endX(),
@@ -413,7 +455,7 @@ class SquareCanon {
     color = "white",
     x2 = 0,
     y2 = 0,
-    radius = 10,
+    radius = 5,
     speedFactor = 5,
     interval = 10,
     targ = board
@@ -430,7 +472,7 @@ class SquareCanon {
     this.y2 = y2;
     this.radius = radius;
     this.speedFactor = speedFactor;
-    this.tar = target;
+    this.tar = targ;
 
     this.interval = interval;
     this.index = 0;
@@ -438,14 +480,21 @@ class SquareCanon {
     this.ballArray = [];
   }
 
+  touchingBoard(ball) {
+    if (isPointInsideSquare(ball.x1, ball.y1, board.x, board.y, board.size)) {
+      this.ballArray.shift();
+      board.changeColor(this.color);
+    }
+  }
+
   createBall() {
     this.ballArray.push(
       new FireBall(
         this.centreX,
         this.centreY,
-        this.tar.x,
-        this.tar.y,
-        10,
+        this.tar.centreX,
+        this.tar.centreY,
+        this.radius,
         this.color,
         this.speedFactor
       )
@@ -463,10 +512,8 @@ class SquareCanon {
 
   updateBalls() {
     for (let ball of this.ballArray) {
-      if (this.outOfCanvas(ball, ball.radius)) {
-        return;
-      }
       ball.update();
+      this.touchingBoard(ball);
     }
   }
 
@@ -502,48 +549,6 @@ class SquareCanon {
   }
 }
 
-class Board {
-  constructor(size = 450, x = middleX() - size / 2, y = 0) {
-    this.x = x;
-    this.y = y;
-    this.size = size;
-
-    this.centreX = this.x + this.size / 2;
-    this.centreY = this.x + this.size / 2;
-
-    this.r = 0;
-    this.g = 0;
-    this.b = 0;
-  }
-
-  redder() {
-    this.r += 1;
-  }
-
-  greener() {
-    this.g += 1;
-  }
-
-  bluer() {
-    this.b += 1;
-  }
-
-  update() {
-    this.draw();
-  }
-
-  draw() {
-    fillRectangle(
-      this.x,
-      this.y,
-      this.size,
-      this.size,
-      `rgb(${this.r}, ${this.g}, ${this.b})`,
-      "white",
-      1
-    );
-  }
-}
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
@@ -553,6 +558,14 @@ window.addEventListener("mousemove", function (evt) {
 
 window.addEventListener("resize", function () {
   maxify();
+
+  board = new Board();
+
+  Y = endY() - size - 5;
+
+  red = new SquareCanon(middleX() - size - gap - half, Y, 50, "red");
+  green = new SquareCanon(middleX() - half, Y, 50, "green");
+  blue = new SquareCanon(middleX() + size + gap - half, Y, 50, "blue");
 });
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -570,8 +583,6 @@ red = new SquareCanon(middleX() - size - gap - half, Y, 50, "red");
 green = new SquareCanon(middleX() - half, Y, 50, "green");
 blue = new SquareCanon(middleX() + size + gap - half, Y, 50, "blue");
 
-let temp = new Board();
-
 fillCanvas("black");
 function animate() {
   requestAnimationFrame(animate);
@@ -580,6 +591,6 @@ function animate() {
   red.update();
   green.update();
   blue.update();
-  temp.update();
+  board.update();
 }
 animate();
