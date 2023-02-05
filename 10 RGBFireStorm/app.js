@@ -431,6 +431,20 @@ class SquareCanon {
     this.ballArray = [];
   }
 
+  createBall() {
+    this.ballArray.push(
+      new FireBall(
+        this.centreX,
+        this.centreY,
+        mouse.x,
+        mouse.y,
+        10,
+        this.color,
+        this.speedFactor
+      )
+    );
+  }
+
   updateBalls() {
     for (let ball of this.ballArray) {
       ball.update();
