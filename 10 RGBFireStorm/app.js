@@ -444,9 +444,6 @@ class SquareCanon {
   }
 
   update() {
-    this.runFunction(function () {
-      this.color = randomColor();
-    });
     this.draw();
   }
   draw() {
@@ -477,7 +474,7 @@ window.addEventListener("resize", function () {
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
-temp = new SquareCanon();
+temp = new SquareCanon(middleX(), middleY());
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("white");
