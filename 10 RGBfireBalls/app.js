@@ -155,7 +155,7 @@ function updateArray(arr) {
 }
 
 function updateObject(obj) {
-  for (const objt of Object.values(obj)) {
+  for (const objt in Object.values(obj)) {
     objt.update();
   }
 }
@@ -349,10 +349,8 @@ function fillRectangle(
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
-let mouse = { x: -200, y: -200 };
-let x, y;
-x = 0;
-y = 20;
+let mouse, centre, satellites;
+mouse = { x: middleX(), y: middleY() };
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -363,43 +361,88 @@ window.addEventListener("mousemove", function (evt) {
 
 window.addEventListener("resize", function () {
   maxify();
+  centre = new Centre();
+  satellites = arrayOfObjects(1000, Satellite);
+  mouse = { x: middleX(), y: middleY() };
 });
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
-class Box {
-  constructor(text = "x", length = () => x, color = "white") {
-    this.x = 60;
+class Centre {
+  constructor(x = middleX(), y = middleY(), radius = 3, color = "black") {
+    this.x = x;
     this.y = y;
-    this.length = length;
-    this.breadth = 60;
+    this.radius = radius;
     this.color = color;
 
-    this.text = text;
-
-    y = y + this.breadth + 20;
+    this.distanceToMouse = undefined;
+    this.angleToMouse = undefined;
   }
 
-  drawText() {
-    ctx.font = "25px serif";
-    ctx.fillStyle = this.color;
-    ctx.fillText(this.text, 10, this.y + 40);
+  setPositionToMouse() {
+    this.x = mouse.x;
+    this.y = mouse.y;
   }
 
-  draw() {
-    fillRectangle(
-      this.x,
-      this.y,
-      Math.min(this.length(), canvas.width),
-      this.breadth,
-      this.color,
-      this.lineWidth,
-      this.color
-    );
-    this.drawText();
+  getDistanceToMouse() {
+    this.distanceToMouse = getDistance(this.x, this.y, mouse.x, mouse.y);
+  }
+
+  getAngleToMouse() {
+    this.angleToMouse = getAngle(this.x, this.y, mouse.x, mouse.y);
+  }
+
+  followMouseSlowly() {
+    this.getDistanceToMouse();
+    this.getAngleToMouse();
+
+    if (this.distanceToMouse > 5) {
+      this.x = this.x + 5 * Math.cos(this.angleToMouse);
+      this.y = this.y - 5 * Math.sin(this.angleToMouse);
+    }
   }
 
   update() {
+    this.followMouseSlowly();
+  }
+}
+
+class Satellite {
+  constructor() {
+    this.distance = randRange(50, 350);
+    this.angle = randRange(0, 2 * Math.PI);
+    this.angleSpeed = randRange(0.02, 0.03);
+
+    this.color = randItem(["#F2CD5C", "#F2921D", "#A61F69", "#400E32"]);
+    // this.color = randomColor();
+    this.x = newX(centre.x, centre.y, this.distance, this.angle);
+
+    this.y = newY(centre.x, centre.y, this.distance, this.angle);
+
+    this.oldX = undefined;
+    this.oldY = undefined;
+  }
+
+  draw() {
+    drawLineSegment(this.oldX, this.oldY, this.x, this.y, this.color, 3);
+  }
+
+  updateAngle() {
+    this.angle -= this.angleSpeed;
+    this.angle = this.angle % (2 * Math.PI);
+  }
+
+  updatePosition() {
+    this.oldX = this.x;
+    this.oldY = this.y;
+
+    this.x = newX(centre.x, centre.y, this.distance, this.angle);
+    this.y = newY(centre.x, centre.y, this.distance, this.angle);
+  }
+
+  update() {
+    this.updateAngle();
+    this.updatePosition();
     this.draw();
   }
 }
@@ -407,31 +450,14 @@ class Box {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-let log = () => Math.log10(x);
-let root = () => Math.sqrt(x);
-let normal = () => x;
-let square = () => x * x;
-let cube = () => x * x * x;
-let exponential = () => Math.pow(Math.E, x);
+centre = new Centre();
+satellites = arrayOfObjects(1000, Satellite);
 
-x = 0;
-let box1 = new Box("ln x", log, "white");
-let box2 = new Box("√x", root, "white");
-let box3 = new Box("x", normal, "red");
-let box4 = new Box("x²", square, "white");
-let box5 = new Box("x³", cube, "white");
-let box6 = new Box("e^x", exponential, "white");
 function animate() {
   requestAnimationFrame(animate);
-  fillCanvas("black");
+  fillCanvas("rgba(0,0,0, 0.1)");
 
-  // fillRectangle(30, middleY(), x, 50, "white", 1, "white");
-  box1.update();
-  box2.update();
-  box3.update();
-  box4.update();
-  box5.update();
-  box6.update();
-  x += 0.05;
+  updateArray(satellites);
+  centre.update();
 }
 animate();
