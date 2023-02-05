@@ -448,8 +448,20 @@ class SquareCanon {
     );
   }
 
+  outOfCanvas(obj, offset = 10) {
+    return (
+      obj.x + offset < 0 ||
+      obj.x - offset > canvas.width ||
+      obj.y + offset < 0 ||
+      obj.y - offset > canvas.height
+    );
+  }
+
   updateBalls() {
     for (let ball of this.ballArray) {
+      if (this.outOfCanvas(ball, ball.radius)) {
+        return;
+      }
       ball.update();
     }
   }
