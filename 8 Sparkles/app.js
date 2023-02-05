@@ -505,12 +505,15 @@ function createSparkles() {
 
 let temp = [];
 let i = 1,
-  time = 10;
+  time = 5;
+let i2 = 1,
+  time2 = 100;
+
+temp.push(createSparkles());
+
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
-
-  temp.push(createSparkles());
 
   for (let obj of temp) {
     updateObject(obj);
@@ -518,8 +521,14 @@ function animate() {
 
   if (i % time === 0) {
     i = 1;
-    temp.shift();
+    temp.push(createSparkles());
   }
   i++;
+
+  if (i2 % time2 === 0) {
+    i2 = 1;
+    temp.shift();
+  }
+  i2++;
 }
 animate();
