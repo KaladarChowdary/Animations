@@ -361,13 +361,6 @@ balls = {};
 window.addEventListener("mousemove", function (evt) {
   mouse.x = evt.pageX;
   mouse.y = evt.pageY;
-
-  balls = createSparkles();
-});
-
-window.addEventListener("mouseover", function () {
-  setOfBalls[index2] = createSparkles();
-  index2++;
 });
 
 window.addEventListener("resize", function () {
@@ -437,7 +430,9 @@ class Ball {
   }
 
   draw() {
-    if (this.radius < 0) return;
+    if (this.radius < 0) {
+      return;
+    }
     drawBall(
       this.x,
       this.y,
@@ -508,13 +503,23 @@ function createSparkles() {
   return obj;
 }
 
-// console.log(balls);
+let temp = [];
+let i = 1,
+  time = 10;
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  for (balls of Object.values(setOfBalls)) {
-    updateObject(balls);
+  temp.push(createSparkles());
+
+  for (let obj of temp) {
+    updateObject(obj);
   }
+
+  if (i % time === 0) {
+    i = 1;
+    temp.shift();
+  }
+  i++;
 }
 animate();
