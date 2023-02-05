@@ -358,6 +358,8 @@ index = 0;
 window.addEventListener("mousemove", function (evt) {
   mouse.x = evt.pageX;
   mouse.y = evt.pageY;
+
+  balls = createSparkles();
 });
 
 window.addEventListener("resize", function () {
