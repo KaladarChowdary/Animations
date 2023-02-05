@@ -403,6 +403,8 @@ class FireBall {
     drawBall(this.x1, this.y1, this.radius, 1, this.color, this.color);
   }
 }
+
+class SquareCanon {}
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
