@@ -361,91 +361,10 @@ window.addEventListener("mousemove", function (evt) {
 
 window.addEventListener("resize", function () {
   maxify();
-  centre = new Centre();
-  satellites = arrayOfObjects(1000, Satellite);
-  mouse = { x: middleX(), y: middleY() };
 });
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
-class Centre {
-  constructor(x = middleX(), y = middleY(), radius = 3, color = "black") {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-
-    this.distanceToMouse = undefined;
-    this.angleToMouse = undefined;
-  }
-
-  setPositionToMouse() {
-    this.x = mouse.x;
-    this.y = mouse.y;
-  }
-
-  getDistanceToMouse() {
-    this.distanceToMouse = getDistance(this.x, this.y, mouse.x, mouse.y);
-  }
-
-  getAngleToMouse() {
-    this.angleToMouse = getAngle(this.x, this.y, mouse.x, mouse.y);
-  }
-
-  followMouseSlowly() {
-    this.getDistanceToMouse();
-    this.getAngleToMouse();
-
-    if (this.distanceToMouse > 5) {
-      this.x = this.x + 5 * Math.cos(this.angleToMouse);
-      this.y = this.y - 5 * Math.sin(this.angleToMouse);
-    }
-  }
-
-  update() {
-    this.followMouseSlowly();
-  }
-}
-
-class Satellite {
-  constructor() {
-    this.distance = randRange(50, 350);
-    this.angle = randRange(0, 2 * Math.PI);
-    this.angleSpeed = randRange(0.02, 0.03);
-
-    this.color = randItem(["#F2CD5C", "#F2921D", "#A61F69", "#400E32"]);
-    // this.color = randomColor();
-    this.x = newX(centre.x, centre.y, this.distance, this.angle);
-
-    this.y = newY(centre.x, centre.y, this.distance, this.angle);
-
-    this.oldX = undefined;
-    this.oldY = undefined;
-  }
-
-  draw() {
-    drawLineSegment(this.oldX, this.oldY, this.x, this.y, this.color, 3);
-  }
-
-  updateAngle() {
-    this.angle -= this.angleSpeed;
-    this.angle = this.angle % (2 * Math.PI);
-  }
-
-  updatePosition() {
-    this.oldX = this.x;
-    this.oldY = this.y;
-
-    this.x = newX(centre.x, centre.y, this.distance, this.angle);
-    this.y = newY(centre.x, centre.y, this.distance, this.angle);
-  }
-
-  update() {
-    this.updateAngle();
-    this.updatePosition();
-    this.draw();
-  }
-}
 
 class Ball {
   constructor(
@@ -507,33 +426,19 @@ class Ball {
   }
 
   update() {
-    this.updateLimit();
-    this.updatePrevNext();
-
-    if (this.detectFirstCollision()) {
-      if (this.limit === 0 && this.radius >= 5) {
-        this.createMultipleChildren();
-        delete ballObject[this.i];
-      }
-    }
-
-    this.bounceOnCollision();
     this.updateXY();
+    this.bounceOnCollision();
     this.draw();
   }
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
-
-centre = new Centre();
-satellites = arrayOfObjects(1000, Satellite);
-
+let ball = new Ball();
 function animate() {
   requestAnimationFrame(animate);
-  fillCanvas("rgba(0,0,0, 0.1)");
+  fillCanvas("black");
 
-  updateArray(satellites);
-  centre.update();
+  ball.update();
 }
 animate();
