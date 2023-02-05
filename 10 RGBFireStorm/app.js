@@ -458,7 +458,7 @@ class SquareCanon {
     radius = 5,
     speedFactor = 5,
     interval = 10,
-    targ = board
+    targ = target
   ) {
     this.x = x;
     this.y = y;
@@ -492,8 +492,8 @@ class SquareCanon {
       new FireBall(
         this.centreX,
         this.centreY,
-        this.tar.centreX,
-        this.tar.centreY,
+        this.tar.x,
+        this.tar.y,
         this.radius,
         this.color,
         this.speedFactor
