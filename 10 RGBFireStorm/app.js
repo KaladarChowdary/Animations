@@ -360,6 +360,7 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: middleX(), y: middleY() };
+let temp;
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASS
 class FireBall {
@@ -369,7 +370,8 @@ class FireBall {
     x2 = 0,
     y2 = 0,
     radius = 10,
-    color = "white"
+    color = "white",
+    speedFactor = 5
   ) {
     this.x1 = x1;
     this.x2 = x2;
@@ -377,18 +379,20 @@ class FireBall {
     this.y2 = y2;
     this.radius = radius;
     this.color = color;
+
+    this.speedFactor = speedFactor;
     this.getDxDy();
   }
 
   updateXY() {
-    this.x += this.dx;
-    this.y += this.dy;
+    this.x1 += this.dx;
+    this.y1 += this.dy;
   }
 
   getDxDy() {
     let theta = getAngle(this.x1, this.y1, this.x2, this.y2);
-    this.dx = Math.cos(theta);
-    this.dy = Math.sin(theta);
+    this.dx = this.speedFactor * Math.cos(theta);
+    this.dy = this.speedFactor * -Math.sin(theta);
   }
 
   update() {
@@ -415,7 +419,7 @@ window.addEventListener("resize", function () {
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
-let temp = new FireBall();
+temp = new FireBall();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("rgba(0,0,0, 0.1)");
