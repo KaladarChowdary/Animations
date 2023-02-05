@@ -331,8 +331,8 @@ function fillRectangle(
   length = 10,
   breadth = 20,
   fillColor = "black",
-  lineWidth = 1,
-  lineColor = fillColor
+  lineColor = fillColor,
+  lineWidth = 1
 ) {
   ctx.beginPath();
   ctx.strokeStyle = lineColor;
@@ -430,11 +430,19 @@ class SquareCanon {
   }
 
   draw() {
-    drawRectangle(this.x, this.y, this.size, this.size, this.color, 1);
+    fillRectangle(
+      this.x,
+      this.y,
+      this.size,
+      this.size,
+      this.color,
+      this.color,
+      1
+    );
   }
 
   update() {
-    this.draw;
+    this.draw();
   }
 }
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -453,10 +461,10 @@ window.addEventListener("resize", function () {
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
-temp = new FireBall();
+temp = new SquareCanon();
 function animate() {
   requestAnimationFrame(animate);
-  fillCanvas("rgba(0,0,0, 0.1)");
+  fillCanvas("white");
 
   temp.update();
 }
