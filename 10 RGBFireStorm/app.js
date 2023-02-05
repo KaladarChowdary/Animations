@@ -344,13 +344,49 @@ function fillRectangle(
   ctx.closePath();
 }
 
+function moveTo(x, targetX, step) {
+  if (x > targetX) {
+    return Math.max(x - step, targetX);
+  } else if (x < targetX) {
+    return Math.min(x + step, targetX);
+  } else {
+    return targetX;
+  }
+}
+
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // VARIABLE DECLARATIONS
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: middleX(), y: middleY() };
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// CLASS
+class FireBall {
+  constructor(
+    x1 = endX(),
+    y1 = endY(),
+    x2 = 0,
+    y2 = 0,
+    radius = 5,
+    color = "white"
+  ) {
+    this.x1 = x1;
+    this.x2 = x2;
+    this.y1 = y1;
+    this.y2 = y2;
+    this.radius = radius;
+    this.color = color;
+    getDxDy();
+  }
 
+  update() {
+    this.draw();
+  }
+  draw() {
+    drawBall(this.x, this.y, this.radius, 1, this.color, this.color);
+  }
+}
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
@@ -367,9 +403,11 @@ window.addEventListener("resize", function () {
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
-
+let temp = new FireBall();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("rgba(0,0,0, 0.1)");
+
+  temp.update();
 }
 animate();
