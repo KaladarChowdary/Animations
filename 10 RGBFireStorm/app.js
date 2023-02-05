@@ -427,6 +427,8 @@ class SquareCanon {
     this.speedFactor = speedFactor;
     this.interval = interval;
     this.index = 0;
+
+    this.ballArray = [];
   }
 
   changeColor(object) {
