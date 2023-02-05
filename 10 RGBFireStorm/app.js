@@ -430,6 +430,11 @@ class SquareCanon {
   }
 
   draw() {
+    this.index++;
+    if (this.index % this.interval === 0) {
+      this.index = 0;
+      this.color = randomColor();
+    }
     fillRectangle(
       this.x,
       this.y,
