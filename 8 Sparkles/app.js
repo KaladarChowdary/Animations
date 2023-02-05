@@ -349,7 +349,7 @@ function fillRectangle(
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
-let mouse, index;
+let mouse, index, balls, setOfBalls;
 mouse = { x: middleX(), y: middleY() };
 index = 0;
 
@@ -500,7 +500,7 @@ function createSparkles() {
   return obj;
 }
 
-let balls = createSparkles();
+balls = createSparkles();
 // console.log(balls);
 function animate() {
   requestAnimationFrame(animate);
