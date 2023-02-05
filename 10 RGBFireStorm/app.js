@@ -414,7 +414,7 @@ class SquareCanon {
     y2 = 0,
     radius = 10,
     speedFactor = 5,
-    interval = 100
+    interval = 50
   ) {
     this.x = x;
     this.y = y;
@@ -429,12 +429,27 @@ class SquareCanon {
     this.index = 0;
   }
 
-  draw() {
-    this.index++;
-    if (this.index % this.interval === 0) {
-      this.index = 0;
-      this.color = randomColor();
+  runFunction(f) {
+    if (this.isMouseOnSquare()) {
+      this.index++;
+      if (this.index % this.interval === 0) {
+        this.index = 0;
+        this.color = randomColor();
+      }
     }
+  }
+
+  isMouseOnSquare() {
+    return isPointInsideSquare(mouse.x, mouse.y, this.x, this.y, this.size);
+  }
+
+  update() {
+    this.runFunction(function () {
+      this.color = randomColor();
+    });
+    this.draw();
+  }
+  draw() {
     fillRectangle(
       this.x,
       this.y,
@@ -444,10 +459,6 @@ class SquareCanon {
       this.color,
       1
     );
-  }
-
-  update() {
-    this.draw();
   }
 }
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
