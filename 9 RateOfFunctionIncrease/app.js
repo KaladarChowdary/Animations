@@ -349,12 +349,10 @@ function fillRectangle(
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
-let mouse, balls, setOfBalls, index, index2;
-mouse = { x: -200, y: -200 };
-index = 0;
-index2 = 0;
-setOfBalls = {};
-balls = {};
+let mouse = { x: -200, y: -200 };
+let x, y;
+x = 0;
+y = 20;
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -369,154 +367,71 @@ window.addEventListener("resize", function () {
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
-
-class Ball {
-  constructor(
-    i,
-    x = middleX(),
-    y = middleY(),
-    radius = 5,
-    linewidth = 1,
-    lineColor = "white",
-    fillColor = "white",
-
-    dx = 1,
-    dy = -1,
-    a = 0.05,
-    cutBy = 0.05
-  ) {
-    this.i = i;
-
-    this.x = x;
+class Box {
+  constructor(text = "x", length = () => x, color = "white") {
+    this.x = 60;
     this.y = y;
-    this.radius = radius;
+    this.length = length;
+    this.breadth = 60;
+    this.color = color;
 
-    this.linewidth = linewidth;
-    this.lineColor = lineColor;
-    this.fillColor = fillColor;
+    this.text = text;
 
-    this.dx = dx;
-    this.dy = dy;
-    this.a = a;
-
-    this.cutBy = cutBy;
+    y = y + this.breadth + 20;
   }
 
-  decreaseRadius() {
-    this.radius -= this.cutBy;
-  }
-
-  accelarate() {
-    this.dy += this.a;
-  }
-
-  updateXY() {
-    this.x += this.dx;
-    this.y += this.dy;
-  }
-
-  bounceOnCollision() {
-    if (this.x + this.radius >= canvas.width) {
-      this.dx = negative(this.dx);
-    } else if (this.x - this.radius <= 0) {
-      this.dx = positive(this.dx);
-    }
-
-    if (this.y + this.radius >= canvas.height) {
-      this.dy = 0.8 * negative(this.dy);
-    } else if (this.y - this.radius <= 0) {
-      this.dy = positive(this.dy);
-    }
+  drawText() {
+    ctx.font = "25px serif";
+    ctx.fillStyle = "red";
+    ctx.fillText(this.text, 10, this.y + 40);
   }
 
   draw() {
-    if (this.radius < 0) {
-      return;
-    }
-    drawBall(
+    fillRectangle(
       this.x,
       this.y,
-      this.radius,
-      this.linewidth,
-      this.fillColor,
-      this.lineColor
+      Math.min(this.length(), canvas.width),
+      this.breadth,
+      this.color,
+      this.lineWidth,
+      this.color
     );
+    this.drawText();
   }
 
   update() {
-    this.updateXY();
-    this.accelarate();
-    this.bounceOnCollision();
     this.draw();
-    this.decreaseRadius();
   }
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-function createSparkles() {
-  let x, y, radius, lineWidth, theta, dx, dy, a, cutBy, obj, limit, color;
+let log = () => Math.log10(x);
+let root = () => Math.sqrt(x);
+let normal = () => x;
+let square = () => x * x;
+let cube = () => x * x * x;
+let exponential = () => Math.pow(Math.E, x);
 
-  obj = {};
-  x = mouse.x;
-  y = mouse.y;
-  lineWidth = 1;
-  a = 0.02;
-  cutBy = 0.03;
-  limit = 70;
-
-  for (let i = 1; i <= limit; i++) {
-    radius = randRange(1, 2);
-    theta = (i / limit) * 2 * Math.PI;
-    dx = randRange(2, 3) * Math.cos(theta);
-    dy = randRange(2, 3) * -Math.sin(theta);
-    color = "white";
-    obj[index] = new Ball(
-      index,
-      x,
-      y,
-      radius,
-      lineWidth,
-      color,
-      color,
-      dx,
-      dy,
-      a,
-      cutBy
-    );
-    index++;
-  }
-
-  return obj;
-}
-
-let temp = [];
-let i = 1,
-  time = 5;
-let i2 = 1,
-  time2 = 10;
-
-temp.push(createSparkles());
-
+x = 0;
+let box1 = new Box("ln x", log, "white");
+let box2 = new Box("√x", root, "white");
+let box3 = new Box("x", normal, "white");
+let box4 = new Box("x²", square, "white");
+let box5 = new Box("x³", cube, "white");
+let box6 = new Box("e^x", exponential, "white");
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  for (let obj of temp) {
-    updateObject(obj);
-  }
-
-  if (i % time === 0) {
-    i = 0;
-    temp.push(createSparkles());
-  }
-
-  if (temp.length >= 50) {
-    i2 = 1;
-    temp.shift();
-  }
-  i++;
-  i2++;
+  // fillRectangle(30, middleY(), x, 50, "white", 1, "white");
+  box1.update();
+  box2.update();
+  box3.update();
+  box4.update();
+  box5.update();
+  box6.update();
+  x += 0.1;
 }
 animate();
