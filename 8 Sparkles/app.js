@@ -447,6 +447,128 @@ class Satellite {
   }
 }
 
+class Ball {
+  constructor(
+    i,
+    x = middleX(),
+    y = middleY(),
+    radius = 90,
+    linewidth = 1,
+    lineColor = "black",
+    fillColor = "black",
+
+    dx = 1,
+    dy = 1
+  ) {
+    this.i = i;
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.linewidth = linewidth;
+    this.lineColor = lineColor;
+    this.fillColor = fillColor;
+
+    this.dx = dx;
+    this.dy = dy;
+
+    this.prev = false;
+    this.next = false;
+
+    this.limit = 10;
+  }
+
+  createMultipleChildren() {
+    this.createChild(this.dx, positive(this.dy));
+
+    this.createChild(this.dx, negative(this.dy));
+  }
+
+  createChild(dx = this.dx, dy = this.dy) {
+    let color = randomColor();
+    createNewBallObject(
+      this.x,
+      this.y,
+      (2 * this.radius) / 3,
+      this.linewidth,
+      color,
+      color,
+      dx,
+      dy
+    );
+  }
+
+  detectFirstCollision() {
+    return this.prev === false && this.next === true;
+  }
+
+  updatePrevNext() {
+    this.prev = this.next;
+    this.next = this.detectCollision();
+  }
+
+  detectCollision() {
+    return doesCircleCircleIntersect(
+      this.x,
+      this.y,
+      this.radius,
+      mouse.x,
+      mouse.y,
+      mouse.radius
+    );
+  }
+
+  updateXY() {
+    this.x += this.dx;
+    this.y += this.dy;
+  }
+
+  bounceOnCollision() {
+    if (this.x + this.radius >= canvas.width) {
+      this.dx = negative(this.dx);
+    } else if (this.x - this.radius <= 0) {
+      this.dx = positive(this.dx);
+    }
+
+    if (this.y + this.radius >= canvas.height) {
+      this.dy = negative(this.dy);
+    } else if (this.y - this.radius <= 0) {
+      this.dy = positive(this.dy);
+    }
+  }
+
+  draw() {
+    drawBall(
+      this.x,
+      this.y,
+      this.radius,
+      this.linewidth,
+      this.fillColor,
+      this.lineColor
+    );
+  }
+
+  updateLimit() {
+    this.limit -= 1;
+    this.limit = Math.max(0, this.limit);
+  }
+
+  update() {
+    this.updateLimit();
+    this.updatePrevNext();
+
+    if (this.detectFirstCollision()) {
+      if (this.limit === 0 && this.radius >= 5) {
+        this.createMultipleChildren();
+        delete ballObject[this.i];
+      }
+    }
+
+    this.bounceOnCollision();
+    this.updateXY();
+    this.draw();
+  }
+}
+
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
