@@ -452,69 +452,28 @@ class Ball {
     i,
     x = middleX(),
     y = middleY(),
-    radius = 90,
+    radius = 5,
     linewidth = 1,
-    lineColor = "black",
-    fillColor = "black",
+    lineColor = "white",
+    fillColor = "white",
 
     dx = 1,
-    dy = 1
+    dy = 1,
+    a = 0.05
   ) {
     this.i = i;
+
     this.x = x;
     this.y = y;
     this.radius = radius;
+
     this.linewidth = linewidth;
     this.lineColor = lineColor;
     this.fillColor = fillColor;
 
     this.dx = dx;
     this.dy = dy;
-
-    this.prev = false;
-    this.next = false;
-
-    this.limit = 10;
-  }
-
-  createMultipleChildren() {
-    this.createChild(this.dx, positive(this.dy));
-
-    this.createChild(this.dx, negative(this.dy));
-  }
-
-  createChild(dx = this.dx, dy = this.dy) {
-    let color = randomColor();
-    createNewBallObject(
-      this.x,
-      this.y,
-      (2 * this.radius) / 3,
-      this.linewidth,
-      color,
-      color,
-      dx,
-      dy
-    );
-  }
-
-  detectFirstCollision() {
-    return this.prev === false && this.next === true;
-  }
-
-  updatePrevNext() {
-    this.prev = this.next;
-    this.next = this.detectCollision();
-  }
-
-  detectCollision() {
-    return doesCircleCircleIntersect(
-      this.x,
-      this.y,
-      this.radius,
-      mouse.x,
-      mouse.y,
-      mouse.radius
-    );
+    this.a = a;
   }
 
   updateXY() {
@@ -545,11 +504,6 @@ class Ball {
       this.fillColor,
       this.lineColor
     );
-  }
-
-  updateLimit() {
-    this.limit -= 1;
-    this.limit = Math.max(0, this.limit);
   }
 
   update() {
