@@ -466,17 +466,11 @@ class SquareCanon {
     }
   }
 
-  changeColor(object) {
-    object.color = randomColor();
-  }
-
-  runFunction(f = this.changeColor) {
-    if (this.isMouseOnSquare()) {
-      this.index++;
-      if (this.index % this.interval === 0) {
-        this.index = 0;
-        f(this);
-      }
+  addBallAtInterval() {
+    this.index++;
+    if (this.index % this.interval === 0) {
+      this.index = 0;
+      this.createBall();
     }
   }
 
@@ -485,7 +479,8 @@ class SquareCanon {
   }
 
   update() {
-    this.runFunction();
+    this.addBallAtInterval();
+    this.updateBalls();
     this.draw();
   }
   draw() {
