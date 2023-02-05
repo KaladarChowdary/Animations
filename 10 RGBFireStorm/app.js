@@ -360,7 +360,8 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: -200, y: -200 };
-let temp;
+let red, green, blue, size, half, gap, Y, target, board;
+target = { x: middleX(), y: middleY() };
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASS
 class FireBall {
@@ -406,15 +407,16 @@ class FireBall {
 
 class SquareCanon {
   constructor(
-    x = middleX() - 50,
-    y = middleY() - 50,
-    size = 100,
+    x = middleX() - 25,
+    y = middleY() - 25,
+    size = 50,
     color = "white",
     x2 = 0,
     y2 = 0,
     radius = 10,
     speedFactor = 5,
-    interval = 50
+    interval = 10,
+    targ = board
   ) {
     this.x = x;
     this.y = y;
@@ -428,6 +430,8 @@ class SquareCanon {
     this.y2 = y2;
     this.radius = radius;
     this.speedFactor = speedFactor;
+    this.tar = target;
+
     this.interval = interval;
     this.index = 0;
 
@@ -439,8 +443,8 @@ class SquareCanon {
       new FireBall(
         this.centreX,
         this.centreY,
-        mouse.x,
-        mouse.y,
+        this.tar.x,
+        this.tar.y,
         10,
         this.color,
         this.speedFactor
@@ -467,10 +471,12 @@ class SquareCanon {
   }
 
   addBallAtInterval() {
-    this.index++;
-    if (this.index % this.interval === 0) {
-      this.index = 0;
-      this.createBall();
+    if (this.isMouseOnSquare()) {
+      this.index++;
+      if (this.index % this.interval === 0) {
+        this.index = 0;
+        this.createBall();
+      }
     }
   }
 
@@ -495,6 +501,49 @@ class SquareCanon {
     );
   }
 }
+
+class Board {
+  constructor(size = 450, x = middleX() - size / 2, y = 0) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+
+    this.centreX = this.x + this.size / 2;
+    this.centreY = this.x + this.size / 2;
+
+    this.r = 0;
+    this.g = 0;
+    this.b = 0;
+  }
+
+  redder() {
+    this.r += 1;
+  }
+
+  greener() {
+    this.g += 1;
+  }
+
+  bluer() {
+    this.b += 1;
+  }
+
+  update() {
+    this.draw();
+  }
+
+  draw() {
+    fillRectangle(
+      this.x,
+      this.y,
+      this.size,
+      this.size,
+      `rgb(${this.r}, ${this.g}, ${this.b})`,
+      "white",
+      1
+    );
+  }
+}
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
@@ -511,11 +560,26 @@ window.addEventListener("resize", function () {
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
-temp = new SquareCanon();
+size = 50;
+half = size / 2;
+gap = 100;
+
+Y = endY() - size - 5;
+
+red = new SquareCanon(middleX() - size - gap - half, Y, 50, "red");
+green = new SquareCanon(middleX() - half, Y, 50, "green");
+blue = new SquareCanon(middleX() + size + gap - half, Y, 50, "blue");
+
+let temp = new Board();
+
+fillCanvas("black");
 function animate() {
   requestAnimationFrame(animate);
-  fillCanvas("rgb(0, 0, 0, 0.5)");
+  fillCanvas("rgb(0, 0, 0, 0.25)");
 
+  red.update();
+  green.update();
+  blue.update();
   temp.update();
 }
 animate();
