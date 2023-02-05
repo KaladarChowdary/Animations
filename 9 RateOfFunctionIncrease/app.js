@@ -432,6 +432,6 @@ function animate() {
   box4.update();
   box5.update();
   box6.update();
-  x += 0.1;
+  x += 0.05;
 }
 animate();
