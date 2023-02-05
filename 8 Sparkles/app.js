@@ -155,7 +155,7 @@ function updateArray(arr) {
 }
 
 function updateObject(obj) {
-  for (const objt in Object.values(obj)) {
+  for (const objt of Object.values(obj)) {
     objt.update();
   }
 }
@@ -349,8 +349,9 @@ function fillRectangle(
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
-let mouse, centre, satellites;
+let mouse, index;
 mouse = { x: middleX(), y: middleY() };
+index = 0;
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -377,8 +378,9 @@ class Ball {
     fillColor = "white",
 
     dx = 1,
-    dy = 1,
-    a = 0.05
+    dy = -1,
+    a = 0.05,
+    cutBy = 0.05
   ) {
     this.i = i;
 
@@ -393,6 +395,16 @@ class Ball {
     this.dx = dx;
     this.dy = dy;
     this.a = a;
+
+    this.cutBy = cutBy;
+  }
+
+  decreaseRadius() {
+    this.radius -= this.cutBy;
+  }
+
+  accelarate() {
+    this.dy += this.a;
   }
 
   updateXY() {
@@ -408,13 +420,14 @@ class Ball {
     }
 
     if (this.y + this.radius >= canvas.height) {
-      this.dy = negative(this.dy);
+      this.dy = 0.8 * negative(this.dy);
     } else if (this.y - this.radius <= 0) {
       this.dy = positive(this.dy);
     }
   }
 
   draw() {
+    if (this.radius < 0) return;
     drawBall(
       this.x,
       this.y,
@@ -427,18 +440,70 @@ class Ball {
 
   update() {
     this.updateXY();
+    this.accelarate();
     this.bounceOnCollision();
     this.draw();
+    this.decreaseRadius();
   }
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
-let ball = new Ball();
+
+function createSparkles() {
+  let x,
+    y,
+    radius,
+    lineWidth,
+    lineColor,
+    fillColor,
+    theta,
+    dx,
+    dy,
+    a,
+    cutBy,
+    obj;
+
+  obj = {};
+  x = middleX();
+  y = middleY();
+  lineColor = "white";
+  fillColor = "white";
+  lineWidth = 1;
+  a = 0.05;
+  cutBy = 0.01;
+
+  for (let i = 1; i <= 100; i++) {
+    radius = randRange(0.1, 1);
+    theta = (i / 100) * 2 * Math.PI;
+    dx = Math.cos(theta);
+    dy = -Math.sin(theta);
+
+    obj[index] = new Ball(
+      index,
+      x,
+      y,
+      radius,
+      lineWidth,
+      lineColor,
+      fillColor,
+      dx,
+      dy,
+      a,
+      cutBy
+    );
+    index++;
+  }
+
+  return obj;
+}
+
+let balls = createSparkles();
+// console.log(balls);
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  ball.update();
+  updateObject(balls);
 }
 animate();
