@@ -353,6 +353,8 @@ let mouse, balls, setOfBalls, index, index2;
 mouse = { x: middleX(), y: middleY() };
 index = 0;
 index2 = 0;
+setOfBalls = {};
+balls = {};
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -506,12 +508,13 @@ function createSparkles() {
   return obj;
 }
 
-balls = createSparkles();
 // console.log(balls);
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  updateObject(balls);
+  for (balls of Object.values(setOfBalls)) {
+    updateObject(balls);
+  }
 }
 animate();
