@@ -409,7 +409,7 @@ class SquareCanon {
     x = middleX() - 50,
     y = middleY() - 50,
     size = 100,
-    color = "black",
+    color = "white",
     x2 = 0,
     y2 = 0,
     radius = 10,
@@ -420,6 +420,9 @@ class SquareCanon {
     this.y = y;
     this.size = size;
     this.color = color;
+
+    this.centreX = this.x + this.size / 2;
+    this.centreY = this.y + this.size / 2;
 
     this.x2 = x2;
     this.y2 = y2;
@@ -504,7 +507,7 @@ window.addEventListener("resize", function () {
 temp = new SquareCanon();
 function animate() {
   requestAnimationFrame(animate);
-  fillCanvas("white");
+  fillCanvas("rgb(0, 0, 0, 0.5)");
 
   temp.update();
 }
