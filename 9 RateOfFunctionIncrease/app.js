@@ -386,11 +386,11 @@ class Box {
     ctx.fillText(this.text, 10, this.y + 40);
   }
 
-  draw() {
+  draw(length) {
     fillRectangle(
       this.x,
       this.y,
-      Math.min(this.length(), canvas.width),
+      Math.min(length, canvas.width),
       this.breadth,
       this.color,
       this.lineWidth,
@@ -399,8 +399,8 @@ class Box {
     this.drawText();
   }
 
-  update() {
-    this.draw();
+  update(length) {
+    this.draw(length);
   }
 }
 
@@ -426,12 +426,12 @@ function animate() {
   fillCanvas("black");
 
   // fillRectangle(30, middleY(), x, 50, "white", 1, "white");
-  box1.update();
-  box2.update();
-  box3.update();
-  box4.update();
-  box5.update();
-  box6.update();
+  box1.update(log(x));
+  box2.update(root(x));
+  box3.update(x);
+  box4.update(square(x));
+  box5.update(cube(x));
+  box6.update(exponential(x));
   x += 0.05;
 }
 animate();
