@@ -435,3 +435,7 @@ function animate() {
   x += 0.05;
 }
 animate();
+
+// QUALITY SOFTWARE
+// --- EASY TO UNDERSTAND
+// --- EASY TO MODIFY
