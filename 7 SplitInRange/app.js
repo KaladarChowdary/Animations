@@ -357,7 +357,7 @@ let mouse, ball, ballObject, ballCount, X;
 ballObject = {};
 ballCount = 0;
 mouse = { x: -100, y: -100, radius: 80 };
-X = middleY();
+X = middleX();
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -368,6 +368,7 @@ window.addEventListener("mousemove", function (evt) {
 
 window.addEventListener("resize", function () {
   maxify();
+  X = middleX();
 });
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -401,19 +402,19 @@ class Ball {
 
   createMultipleChildren() {
     this.createChild(
-      this.x + 5,
-      this.y + 5,
+      this.x + 50,
+      this.y + 50,
       (3 * this.radius) / 4,
-      1.1 * this.dx,
-      1.2 * this.dy
+      randRange(1, 1.2) * this.dx,
+      randRange(1, 1.2) * this.dy
     );
 
     this.createChild(
-      this.x - 5,
-      this.y - 5,
+      this.x - 50,
+      this.y - 50,
       (3 * this.radius) / 4,
-      1.2 * this.dx,
-      1.1 * this.dy
+      randRange(1, 1.2) * this.dx,
+      randRange(1, 1.2) * this.dy
     );
   }
 
