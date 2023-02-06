@@ -368,7 +368,7 @@ window.addEventListener("resize", function () {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
 class Box {
-  constructor(text = "x", length = () => x, color = "white") {
+  constructor(text = "x", color = "white") {
     this.x = 60;
     this.y = y;
     this.length = length;
@@ -415,24 +415,30 @@ let cube = () => x * x * x;
 let exponential = () => Math.pow(Math.E, x);
 
 x = 0;
-let box1 = new Box("ln x", log, "white");
-let box2 = new Box("√x", root, "white");
-let box3 = new Box("x", normal, "red");
-let box4 = new Box("x²", square, "white");
-let box5 = new Box("x³", cube, "white");
-let box6 = new Box("e^x", exponential, "white");
+y = 0.01 * x;
+let box1 = new Box("ln x", "white");
+let box2 = new Box("√x", "white");
+let box3 = new Box("x", "red");
+
+let box4 = new Box("x", "red");
+let box5 = new Box(" x^2", "white");
+let box6 = new Box(" x^3", "white");
+let box7 = new Box(" e^x", "white");
+
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  // fillRectangle(30, middleY(), x, 50, "white", 1, "white");
   box1.update(log(x));
   box2.update(root(x));
   box3.update(x);
-  box4.update(square(x));
-  box5.update(cube(x));
-  box6.update(exponential(x));
-  x += 0.05;
+
+  box4.update(x);
+  box5.update(square(x));
+  box6.update(cube(x));
+  box7.update(exponential(x));
+
+  x += 0.01;
 }
 animate();
 
