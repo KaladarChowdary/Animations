@@ -395,9 +395,37 @@ class Ball {
     this.fillColor = fillColor;
     this.lineColor = lineColor;
     this.lineWidth = lineWidth;
+
+    this.getRandomSpeed();
+  }
+
+  bounceOffCanvasBorders() {
+    if (this.x + this.radius >= canvas.width) {
+      this.dx = negative(this.dx);
+    } else if (this.x - this.radius <= 0) {
+      this.dx = positive(this.dx);
+    }
+
+    if (this.y + this.radius >= canvas.height) {
+      this.dy = negative(this.dy);
+    } else if (this.y - this.radius <= 0) {
+      this.dy = positive(this.dy);
+    }
+  }
+
+  updateXY() {
+    this.bounceOffCanvasBorders();
+    this.x += this.dx;
+    this.y += this.dy;
+  }
+
+  getRandomSpeed() {
+    this.dx = randRange(1, 3);
+    this.dy = randRange(1, 3);
   }
 
   update() {
+    this.updateXY();
     this.draw();
   }
 
@@ -486,7 +514,7 @@ class Square {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-let temp = new Square();
+let temp = new Ball();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
