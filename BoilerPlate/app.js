@@ -413,14 +413,84 @@ class Ball {
   }
 }
 
+class Rectangle {
+  constructor(
+    x = middleX(),
+    y = middleY(),
+    length = 100,
+    breadth = 50,
+    fillColor = "white",
+    lineColor = "white",
+    lineWidth = 1
+  ) {
+    this.x = x;
+    this.y = y;
+    this.length = length;
+    this.breadth = breadth;
+    this.fillColor = fillColor;
+    this.lineColor = lineColor;
+    this.lineWidth = lineWidth;
+  }
+
+  update() {
+    this.draw();
+  }
+
+  draw() {
+    fillRectangle(
+      this.x,
+      this.y,
+      this.length,
+      this.breadth,
+      this.fillColor,
+      this.lineColor,
+      this.lineWidth
+    );
+  }
+}
+
+class Square {
+  constructor(
+    x = middleX(),
+    y = middleY(),
+    length = 100,
+    fillColor = "white",
+    lineColor = "white",
+    lineWidth = 1
+  ) {
+    this.x = x;
+    this.y = y;
+    this.length = length;
+    this.fillColor = fillColor;
+    this.lineColor = lineColor;
+    this.lineWidth = lineWidth;
+  }
+
+  update() {
+    this.draw();
+  }
+
+  draw() {
+    fillRectangle(
+      this.x,
+      this.y,
+      this.length,
+      this.length,
+      this.fillColor,
+      this.lineColor,
+      this.lineWidth
+    );
+  }
+}
+
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-let ball = new Ball();
+let temp = new Square();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  ball.update();
+  temp.update();
 }
 animate();
