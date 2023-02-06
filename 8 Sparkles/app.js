@@ -516,3 +516,9 @@ function animate() {
   i++;
 }
 animate();
+
+//  HIGHEST QUALITY CODE
+// --- EASY TO UNDERSTAND
+// --- EASY TO UPDATE
+
+// --- MODULAR
