@@ -380,36 +380,25 @@ window.addEventListener("resize", function () {
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
+class Square {
+  constructor(length, breadth, color) {
+    this.x = 0;
+    this.y = endY() - breadth;
+
+    this.length = length;
+  }
+
+  update() {
+    this.draw();
+  }
+  draw() {}
+}
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-radius = 40;
-length = 200;
-breadth = 100;
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
-
-  circleX = mouse.x;
-  circleY = mouse.y;
-
-  if (
-    circleAwayFromRectangle(
-      circleX,
-      circleY,
-      radius,
-      squareX,
-      squareY,
-      length,
-      breadth
-    )
-  ) {
-    sColor = "green";
-  } else {
-    sColor = "red";
-  }
-  drawBall(circleX, circleY, radius, cColor, cColor);
-  fillRectangle(squareX, squareY, length, breadth, sColor, sColor);
 }
 animate();
