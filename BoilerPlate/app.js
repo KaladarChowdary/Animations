@@ -43,29 +43,29 @@ function clearCanvas() {
 }
 
 // Draws horizontal axis
-function drawHorizontal(color = "grey") {
+function drawHorizontal(y = middleY(), color = "grey") {
   ctx.beginPath();
   ctx.strokeStyle = color;
-  ctx.moveTo(0, middleY());
-  ctx.lineTo(endX(), middleY());
+  ctx.moveTo(0, y);
+  ctx.lineTo(endX(), y);
   ctx.stroke();
   ctx.closePath();
 }
 
 // Draws verticle axis
-function drawVerticle(color = "grey") {
+function drawVerticle(x = middleX(), color = "grey") {
   ctx.beginPath();
   ctx.strokeStyle = color;
   drawAxes;
-  ctx.moveTo(middleX(), 0);
-  ctx.lineTo(middleX(), endY());
+  ctx.moveTo(x, 0);
+  ctx.lineTo(x, endY());
   ctx.stroke();
   ctx.closePath();
 }
 
 function drawAxes(color = "grey") {
-  drawHorizontal(color);
-  drawVerticle(color);
+  drawHorizontal(middleY(), color);
+  drawVerticle(middleX(), color);
 }
 
 // Acceptable X coordinate for circle of given radius
@@ -126,7 +126,7 @@ function absDiff(x1, x2) {
 // FUNCTIONS RELATED TO DISTANCE AND COORDINATE GEOMETRY
 
 function getDistance(x1, y1, x2, y2) {
-  return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+  return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
 
 function isPointInsideCircle(x1, y1, x2, y2, r2) {
@@ -248,29 +248,7 @@ function getAngleInDegrees(x1, y1, x2, y2) {
 }
 
 function hypot(x, y) {
-  return Math.sqrt(x * x, y * y);
-}
-
-function doesCircleSquareIntersect(cX, cY, cR, x2, y2, size2) {
-  return !(
-    cX + cR < x2 ||
-    cX - cR > x2 + size2 ||
-    cY + cR < y2 ||
-    cY - cR > y2 + size2 ||
-    getDistance(cX, cY, x2 + size2 / 2, y2 + size2 / 2) >
-      cR + hypot(size2, size2) / 2
-  );
-}
-
-function doesCircleRectangleIntersect(cX, cY, cR, x2, y2, length2, breadth2) {
-  return !(
-    cX + cR < x2 ||
-    cX - cR > x2 + length2 ||
-    cY + cR < y2 ||
-    cY - cR > y2 + breadth2 ||
-    getDistance(cX, cY, x2 + length2 / 2, y2 + breadth2 / 2) >
-      cR + hypot(length2, breadth2) / 2
-  );
+  return Math.sqrt(x * x + y * y);
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -291,24 +269,6 @@ function drawCircle(
   ctx.closePath();
 }
 
-function drawBall(
-  x = middleX(),
-  y = middleY(),
-  r = 10,
-  lineWidth = 1,
-  fillColor = "black",
-  lineColor = "black"
-) {
-  ctx.beginPath();
-  ctx.strokeStyle = lineColor;
-  ctx.fillStyle = fillColor;
-  ctx.lineWidth = lineWidth;
-  ctx.arc(x, y, r, 0, 2 * Math.PI);
-  ctx.fill();
-  ctx.stroke();
-  ctx.closePath();
-}
-
 function drawRectangle(
   x = middleX(),
   y = middleY(),
@@ -325,25 +285,6 @@ function drawRectangle(
   ctx.closePath();
 }
 
-function fillRectangle(
-  x = middleX(),
-  y = middleY(),
-  length = 10,
-  breadth = 20,
-  fillColor = "black",
-  lineWidth = 1,
-  lineColor = fillColor
-) {
-  ctx.beginPath();
-  ctx.strokeStyle = lineColor;
-  ctx.lineWidth = lineWidth;
-  ctx.fillStyle = fillColor;
-  ctx.strokeRect(x, y, length, breadth);
-  ctx.fillRect(x, y, length, breadth);
-  ctx.stroke();
-  ctx.closePath();
-}
-
 function moveTo(x, targetX, step) {
   if (x > targetX) {
     return Math.max(x - step, targetX);
@@ -355,12 +296,77 @@ function moveTo(x, targetX, step) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// TESTED FUNCTIONS
+function fillRectangle(
+  x = middleX(),
+  y = middleY(),
+  length = 10,
+  breadth = 20,
+  fillColor = "black",
+  lineColor = fillColor,
+  lineWidth = 1
+) {
+  ctx.beginPath();
+  ctx.strokeStyle = lineColor;
+  ctx.lineWidth = lineWidth;
+  ctx.fillStyle = fillColor;
+  ctx.strokeRect(x, y, length, breadth);
+  ctx.fillRect(x, y, length, breadth);
+  ctx.stroke();
+  ctx.closePath();
+}
+
+function drawBall(
+  x = middleX(),
+  y = middleY(),
+  r = 10,
+  fillColor = "black",
+  lineColor = "black",
+  lineWidth = 1
+) {
+  ctx.beginPath();
+  ctx.strokeStyle = lineColor;
+  ctx.fillStyle = fillColor;
+  ctx.lineWidth = lineWidth;
+  ctx.arc(x, y, r, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.stroke();
+  ctx.closePath();
+}
+
+function circleAwayFromSquare(cX, cY, cR, x2, y2, size2) {
+  return (
+    cX + cR < x2 ||
+    cX - cR > x2 + size2 ||
+    cY + cR < y2 ||
+    cY - cR > y2 + size2 ||
+    getDistance(cX, cY, x2 + size2 / 2, y2 + size2 / 2) >
+      cR + hypot(size2, size2) / 2
+  );
+}
+
+function circleAwayFromRectangle(cX, cY, cR, x2, y2, length2, breadth2) {
+  return (
+    cX + cR < x2 ||
+    cX - cR > x2 + length2 ||
+    cY + cR < y2 ||
+    cY - cR > y2 + breadth2 ||
+    getDistance(cX, cY, x2 + length2 / 2, y2 + breadth2 / 2) >
+      cR + hypot(length2, breadth2) / 2
+  );
+}
+
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // VARIABLE DECLARATIONS
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
-let mouse = { x: middleX(), y: middleY() };
-
+let mouse = { x: undefined, y: undefined };
+let squareX, squareY, circleX, circleY, cColor, sColor, length, breadth, radius;
+squareX = middleX();
+squareY = middleY();
+sColor = "green";
+cColor = "red";
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
@@ -378,8 +384,32 @@ window.addEventListener("resize", function () {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
+radius = 40;
+length = 200;
+breadth = 100;
 function animate() {
   requestAnimationFrame(animate);
-  fillCanvas("rgba(0,0,0, 0.1)");
+  fillCanvas("black");
+
+  circleX = mouse.x;
+  circleY = mouse.y;
+
+  if (
+    circleAwayFromRectangle(
+      circleX,
+      circleY,
+      radius,
+      squareX,
+      squareY,
+      length,
+      breadth
+    )
+  ) {
+    sColor = "green";
+  } else {
+    sColor = "red";
+  }
+  drawBall(circleX, circleY, radius, cColor, cColor);
+  fillRectangle(squareX, squareY, length, breadth, sColor, sColor);
 }
 animate();
