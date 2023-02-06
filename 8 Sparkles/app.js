@@ -480,7 +480,7 @@ function createSparkles() {
   limit = 70;
 
   for (let i = 1; i <= limit; i++) {
-    radius = randRange(1, 2);
+    radius = randRange(1, 5);
     theta = (i / limit) * 2 * Math.PI;
     dx = randRange(2, 3) * Math.cos(theta);
     dy = randRange(2, 3) * -Math.sin(theta);
@@ -527,7 +527,7 @@ function animate() {
   }
 
   // When set of 360 sets increase by 15 then delete the very first one
-  if (temp.length >= 15) {
+  if (temp.length >= 20) {
     temp.shift();
   }
   i++;
