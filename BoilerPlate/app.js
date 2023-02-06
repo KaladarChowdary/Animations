@@ -380,25 +380,47 @@ window.addEventListener("resize", function () {
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
-class Square {
-  constructor(length, breadth, color) {
-    this.x = 0;
-    this.y = endY() - breadth;
-
-    this.length = length;
+class Ball {
+  constructor(
+    x = middleX(),
+    y = middleY(),
+    radius = 10,
+    fillColor = "white",
+    lineColor = "white",
+    lineWidth = 1
+  ) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.fillColor = fillColor;
+    this.lineColor = lineColor;
+    this.lineWidth = lineWidth;
   }
 
   update() {
     this.draw();
   }
-  draw() {}
+
+  draw() {
+    drawBall(
+      this.x,
+      this.y,
+      this.radius,
+      this.fillColor,
+      this.lineColor,
+      this.lineWidth
+    );
+  }
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
+let ball = new Ball();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
+
+  ball.update();
 }
 animate();
