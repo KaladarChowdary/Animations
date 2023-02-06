@@ -356,7 +356,7 @@ maxify();
 let mouse, ball, ballObject, ballCount, X;
 ballObject = {};
 ballCount = 0;
-mouse = { x: -100, y: -100, radius: 80 };
+mouse = { x: -100, y: -100 };
 X = middleX();
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -374,6 +374,7 @@ window.addEventListener("resize", function () {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
 class Ball {
+  // Initializes balls to make it perform everything
   constructor(
     i,
     x = middleX(),
@@ -400,27 +401,10 @@ class Ball {
     this.limit = 50;
   }
 
-  createMultipleChildren() {
-    this.createChild(
-      this.x + 50,
-      this.y + 50,
-      (3 * this.radius) / 4,
-      randRange(1, 1.2) * this.dx,
-      randRange(1, 1.2) * this.dy
-    );
-
-    this.createChild(
-      this.x - 50,
-      this.y - 50,
-      (3 * this.radius) / 4,
-      randRange(1, 1.2) * this.dx,
-      randRange(1, 1.2) * this.dy
-    );
-  }
-
-  createChild(x, y, radius, dx, dy) {
-    let color = randomColor();
-    createNewBallObject(x, y, radius, this.linewidth, color, color, dx, dy);
+  // Creates twin children and adds to same object
+  // Twin children are created from original objects properties
+  birthTwinChildren() {
+    createTwinBalls(this.x, this.y, this.radius, this.dx, this.dy);
   }
 
   updateXY() {
@@ -454,14 +438,13 @@ class Ball {
   }
 
   updateLimit() {
-    this.limit -= 1;
-    this.limit = Math.max(0, this.limit);
+    if (this.limit > 0) {
+      this.limit -= 1;
+    }
   }
 
   update() {
     this.updateLimit();
-
-    this.color = "white";
 
     if (
       this.radius > 10 &&
@@ -469,7 +452,7 @@ class Ball {
       ((this.x + this.radius > X && this.x + this.radius - this.dx < X) ||
         (this.x - this.radius < X && this.x - this.radius - this.dx > X))
     ) {
-      this.createMultipleChildren();
+      this.birthTwinChildren();
       delete ballObject[this.i];
     }
 
@@ -482,12 +465,15 @@ class Ball {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
+// Creates ball object, with automatic indexing
+// Initial position and velocity with direction included
+// It's color too. All are initially provided
 function createNewBallObject(
   x = middleX(),
   y = middleY(),
   radius = 90,
   linewidth = 1,
-  lineColor = "white",
+  lineColor = "black",
   fillColor = "white",
 
   dx = randRange(3, 5),
@@ -507,13 +493,38 @@ function createNewBallObject(
   ballCount++;
 }
 
+function createTwinBalls(x, y, radius, dx, dy) {
+  let radius2 = (3 * radius) / 4;
+  let color = randomColor();
+  createNewBallObject(
+    x,
+    y,
+    radius2,
+    1,
+    color,
+    color,
+    1.1 * dx,
+    dy + 2 * Math.random()
+  );
+  color = randomColor();
+  createNewBallObject(
+    x,
+    y,
+    radius2,
+    1,
+    color,
+    color,
+    1.3 * dx,
+    dy - 2 * Math.random()
+  );
+}
+
 createNewBallObject();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
   updateObject(ballObject);
-
   drawLineSegment(X, 0, X, endY(), "white", 3);
 }
 animate();
