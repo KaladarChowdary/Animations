@@ -356,7 +356,7 @@ maxify();
 let mouse, ball, ballObject, ballCount, X;
 ballObject = {};
 ballCount = 0;
-mouse = { x: 0, y: 0, radius: 80 };
+mouse = { x: -100, y: -100, radius: 80 };
 X = middleY();
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -396,61 +396,30 @@ class Ball {
     this.dx = dx;
     this.dy = dy;
 
-    this.prev = false;
-    this.next = false;
-
-    this.limit = 10;
+    this.limit = 50;
   }
 
   createMultipleChildren() {
     this.createChild(
-      randRange(1, 1.25) * this.dx,
-      randRange(1, 1.25) * positive(this.dy)
+      this.x + 5,
+      this.y + 5,
+      (3 * this.radius) / 4,
+      1.1 * this.dx,
+      1.2 * this.dy
     );
 
     this.createChild(
-      randRange(1, 1.25) * this.dx,
-      randRange(1, 1.25) * negative(this.dy)
-    );
-
-    this.createChild(
-      randRange(1.1, 1, 2) * this.dx,
-      randRange(1.1, 1, 2) * negative(this.dy)
+      this.x - 5,
+      this.y - 5,
+      (3 * this.radius) / 4,
+      1.2 * this.dx,
+      1.1 * this.dy
     );
   }
 
-  createChild(dx = this.dx, dy = this.dy) {
+  createChild(x, y, radius, dx, dy) {
     let color = randomColor();
-    createNewBallObject(
-      this.x,
-      this.y,
-      (2 * this.radius) / 3,
-      this.linewidth,
-      color,
-      color,
-      dx,
-      dy
-    );
-  }
-
-  detectFirstCollision() {
-    return this.prev === false && this.next === true;
-  }
-
-  updatePrevNext() {
-    this.prev = this.next;
-    this.next = this.detectCollision();
-  }
-
-  detectCollision() {
-    return doesCircleCircleIntersect(
-      this.x,
-      this.y,
-      this.radius,
-      mouse.x,
-      mouse.y,
-      mouse.radius
-    );
+    createNewBallObject(x, y, radius, this.linewidth, color, color, dx, dy);
   }
 
   updateXY() {
@@ -490,13 +459,17 @@ class Ball {
 
   update() {
     this.updateLimit();
-    this.updatePrevNext();
 
-    if (this.detectFirstCollision()) {
-      if (this.limit === 0 && this.radius >= 15) {
-        this.createMultipleChildren();
-        delete ballObject[this.i];
-      }
+    this.color = "white";
+
+    if (
+      this.radius > 10 &&
+      this.limit === 0 &&
+      ((this.x + this.radius > X && this.x + this.radius - this.dx < X) ||
+        (this.x - this.radius < X && this.x - this.radius - this.dx > X))
+    ) {
+      this.createMultipleChildren();
+      delete ballObject[this.i];
     }
 
     this.bounceOnCollision();
