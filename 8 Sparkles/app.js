@@ -507,7 +507,7 @@ function createSparkles() {
 
 let temp = [];
 let i = 1,
-  time = 5;
+  time = 3;
 
 temp.push(createSparkles());
 
@@ -527,7 +527,7 @@ function animate() {
   }
 
   // When set of 360 sets increase by 15 then delete the very first one
-  if (temp.length >= 20) {
+  if (temp.length >= 30) {
     temp.shift();
   }
   i++;
