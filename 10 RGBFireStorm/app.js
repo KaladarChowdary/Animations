@@ -365,19 +365,23 @@ target = { x: middleX(), y: middleY() };
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASS
 class Board {
+  // Takes x and places it at the middle of the top. And takes size too
   constructor(size = 450, x = middleX() - size / 2, y = 0) {
     this.x = x;
     this.y = y;
     this.size = size;
 
+    // Gets it's centreX and centreY
     this.centreX = this.x + this.size / 2;
     this.centreY = this.x + this.size / 2;
 
+    // Initializes r, g and b to zero
     this.r = 0;
     this.g = 0;
     this.b = 0;
   }
 
+  // Other object calls it, takes a color and increments according to that
   changeColor(color = "black") {
     if (color === "red") {
       this.r += 5;
@@ -388,10 +392,12 @@ class Board {
     }
   }
 
+  // Just draws
   update() {
     this.draw();
   }
 
+  // Draws rectangle with color according to the values of R, G, B
   draw() {
     fillRectangle(
       this.x,
@@ -407,6 +413,8 @@ class Board {
 board = new Board();
 
 class FireBall {
+  // Actual fireball, takes starting position, final position and size
+  // Creates speed according to those positions, increases it by speed factor
   constructor(
     x1 = endX(),
     y1 = endY(),
@@ -427,34 +435,46 @@ class FireBall {
     this.getDxDy();
   }
 
+  // Updates the position of fireball
   updateXY() {
     this.x1 += this.dx;
     this.y1 += this.dy;
   }
 
+  // Calculates dx and dy according to the position to be reached and speedfactor
   getDxDy() {
     let theta = getAngle(this.x1, this.y1, this.x2, this.y2);
     this.dx = this.speedFactor * Math.cos(theta);
     this.dy = this.speedFactor * -Math.sin(theta);
   }
 
+  // Updates the position and draws the ball. Over and over and over again
   update() {
     this.updateXY();
     this.draw();
   }
+
+  // Simply draws the ball
   draw() {
     drawBall(this.x1, this.y1, this.radius, 1, this.color, this.color);
   }
 }
 
 class SquareCanon {
+  // Takes properties of cannon as well as the fireballs of it, since it shoots
+  // Takes position and size and color of square
+  // Takes targ for target and stuff, but gotta delete and add x2 and y2 explicitly.
+
+  // Fireball births at square, Get's radius from here, gets final position from target
+  // Then get's intervals for creation
+
+  // Get's an empty ball array
   constructor(
     x = middleX() - 25,
     y = middleY() - 25,
     size = 50,
     color = "white",
-    x2 = 0,
-    y2 = 0,
+
     radius = 5,
     speedFactor = 5,
     interval = 10,
@@ -468,11 +488,9 @@ class SquareCanon {
     this.centreX = this.x + this.size / 2;
     this.centreY = this.y + this.size / 2;
 
-    this.x2 = x2;
-    this.y2 = y2;
     this.radius = radius;
     this.speedFactor = speedFactor;
-    this.tar = targ;
+    this.target = targ;
 
     this.interval = interval;
     this.index = 0;
@@ -487,13 +505,14 @@ class SquareCanon {
     }
   }
 
+  // Creates ball, from it's centre to target's position. With size and speed
   createBall() {
     this.ballArray.push(
       new FireBall(
         this.centreX,
         this.centreY,
-        this.tar.x,
-        this.tar.y,
+        this.target.x,
+        this.target.y,
         this.radius,
         this.color,
         this.speedFactor
