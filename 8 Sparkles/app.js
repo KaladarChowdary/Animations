@@ -445,14 +445,8 @@ class Ball {
   // Draws as long as radius isn't zero
   draw() {
     if (this.radius < 0) return;
-    drawBall(
-      this.x,
-      this.y,
-      this.radius,
-      this.linewidth,
-      this.fillColor,
-      this.lineColor
-    );
+
+    drawLineSegment(this.oldX, this.oldY, this.x, this.y, "white", this.radius);
   }
 
   // Ball moves in initial direction
