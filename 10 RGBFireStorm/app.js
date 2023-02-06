@@ -361,19 +361,19 @@ const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: -200, y: -200 };
 let red, green, blue, size, half, gap, Y, target, board;
-target = { x: middleX(), y: middleY() };
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASS
 class Board {
   // Takes x and places it at the middle of the top. And takes size too
-  constructor(size = 450, x = middleX() - size / 2, y = 0) {
+  constructor(size = 400, x = middleX() - size / 2, y = 0) {
     this.x = x;
     this.y = y;
     this.size = size;
 
     // Gets it's centreX and centreY
-    this.centreX = this.x + this.size / 2;
-    this.centreY = this.x + this.size / 2;
+    target = {};
+    target.x = this.x + this.size / 2;
+    target.y = this.y + this.size / 2;
 
     // Initializes r, g and b to zero
     this.r = 0;
@@ -435,6 +435,15 @@ class FireBall {
     this.getDxDy();
   }
 
+  AmIOut() {
+    return (
+      this.x1 + this.radius < 0 ||
+      this.x1 - this.radius > canvas.width ||
+      this.y1 + this.radius < 0 ||
+      this.y1 - this.radius > canvas.height
+    );
+  }
+
   // Updates the position of fireball
   updateXY() {
     this.x1 += this.dx;
@@ -475,7 +484,7 @@ class SquareCanon {
     size = 50,
     color = "white",
 
-    radius = 5,
+    radius = 10,
     speedFactor = 5,
     interval = 10,
     targ = target
@@ -498,6 +507,9 @@ class SquareCanon {
     this.ballArray = [];
   }
 
+  // If ball's centre is inside board
+  // Delete the first ball that's fired
+  // Update the board color with color of square
   touchingBoard(ball) {
     if (isPointInsideSquare(ball.x1, ball.y1, board.x, board.y, board.size)) {
       this.ballArray.shift();
@@ -520,22 +532,21 @@ class SquareCanon {
     );
   }
 
-  outOfCanvas(obj, offset = 10) {
-    return (
-      obj.x + offset < 0 ||
-      obj.x - offset > canvas.width ||
-      obj.y + offset < 0 ||
-      obj.y - offset > canvas.height
-    );
+  // Return whether given ball moved out of canvas or not
+  outOfCanvas(ball) {
+    console.log(ball.AmIOut());
+    return ball.AmIOut();
   }
 
-  updateBalls() {
+  // Update balls of this square cannon
+  moveAndCheckForCollision() {
     for (let ball of this.ballArray) {
       ball.update();
       this.touchingBoard(ball);
     }
   }
 
+  // When mouse is on square. Run the countdown. When it reaches limit then shoot the ball. Reinitialize the countdown
   addBallAtInterval() {
     if (this.isMouseOnSquare()) {
       this.index++;
@@ -543,18 +554,24 @@ class SquareCanon {
         this.index = 0;
         this.createBall();
       }
+    } else {
+      this.index = 0;
     }
   }
 
+  // Return whether mouse is on square or not
   isMouseOnSquare() {
     return isPointInsideSquare(mouse.x, mouse.y, this.x, this.y, this.size);
   }
 
+  // Add ball's at intervals, Update those balls.
   update() {
     this.addBallAtInterval();
-    this.updateBalls();
+    this.moveAndCheckForCollision();
     this.draw();
   }
+
+  // Draw the square
   draw() {
     fillRectangle(
       this.x,
@@ -575,13 +592,16 @@ window.addEventListener("mousemove", function (evt) {
   mouse.y = evt.pageY;
 });
 
+// Draw new board at centre, it will update target
+// Create all 3 squares at the bottom
+// Their x positions accordingly
+// Leave default fireball parameters as it is
 window.addEventListener("resize", function () {
   maxify();
 
   board = new Board();
 
   Y = endY() - size - 5;
-
   red = new SquareCanon(middleX() - size - gap - half, Y, 50, "red");
   green = new SquareCanon(middleX() - half, Y, 50, "green");
   blue = new SquareCanon(middleX() + size + gap - half, Y, 50, "blue");
@@ -605,7 +625,7 @@ blue = new SquareCanon(middleX() + size + gap - half, Y, 50, "blue");
 fillCanvas("black");
 function animate() {
   requestAnimationFrame(animate);
-  fillCanvas("rgb(0, 0, 0, 0.25)");
+  fillCanvas("rgb(0, 0, 0, 0.2)");
 
   red.update();
   green.update();
@@ -613,3 +633,5 @@ function animate() {
   board.update();
 }
 animate();
+
+// SOMETHINGS CHANGING WHEN IT BECOMING FULL SCREEN
