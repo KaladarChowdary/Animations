@@ -353,10 +353,11 @@ function doesCircleCircleIntersect(x1, y1, r1, x2, y2, r2) {
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
-let mouse, ball, ballObject, ballCount;
+let mouse, ball, ballObject, ballCount, X;
 ballObject = {};
 ballCount = 0;
 mouse = { x: 0, y: 0, radius: 80 };
+X = middleY();
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -539,13 +540,6 @@ function animate() {
 
   updateObject(ballObject);
 
-  drawBall(
-    mouse.x,
-    mouse.y,
-    mouse.radius,
-    0,
-    "rgba(256, 256, 256,0.15)",
-    "rgba(256, 256, 256,0.15)"
-  );
+  drawLineSegment(X, 0, X, endY(), "white", 3);
 }
 animate();
