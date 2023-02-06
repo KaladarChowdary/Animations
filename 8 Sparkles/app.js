@@ -350,7 +350,7 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse, balls, setOfBalls, index, index2;
-mouse = { x: -200, y: -200 };
+mouse = { x: middleX(), y: middleY() };
 index = 0;
 index2 = 0;
 setOfBalls = {};
@@ -371,10 +371,15 @@ window.addEventListener("resize", function () {
 // CLASSES
 
 class Ball {
+  // Takes index of the object
+  // Takes position and starting size
+  // Takes color and direction of motion
+  // Takes accelaration and decreasing factor
   constructor(
     i,
     x = middleX(),
     y = middleY(),
+
     radius = 5,
     linewidth = 1,
     lineColor = "white",
@@ -389,6 +394,8 @@ class Ball {
 
     this.x = x;
     this.y = y;
+    this.oldX = x;
+    this.oldY = y;
     this.radius = radius;
 
     this.linewidth = linewidth;
@@ -402,19 +409,25 @@ class Ball {
     this.cutBy = cutBy;
   }
 
+  // Decreases radius by cutBy
   decreaseRadius() {
     this.radius -= this.cutBy;
   }
 
+  // Adds downward accelaration
   accelarate() {
     this.dy += this.a;
   }
 
+  // Adds speed to ball
   updateXY() {
+    this.oldX = this.x;
+    this.oldY = this.y;
     this.x += this.dx;
     this.y += this.dy;
   }
 
+  // Boucing of 4 borders of canvas
   bounceOnCollision() {
     if (this.x + this.radius >= canvas.width) {
       this.dx = negative(this.dx);
@@ -429,10 +442,9 @@ class Ball {
     }
   }
 
+  // Draws as long as radius isn't zero
   draw() {
-    if (this.radius < 0) {
-      return;
-    }
+    if (this.radius < 0) return;
     drawBall(
       this.x,
       this.y,
@@ -443,6 +455,9 @@ class Ball {
     );
   }
 
+  // Ball moves in initial direction
+  // While downward accelaration acts on it
+  // While it's radius is getting decreased
   update() {
     this.updateXY();
     this.accelarate();
@@ -455,6 +470,10 @@ class Ball {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
+// Creates objects around the mouse;
+// Creates at mouse position
+// Creates by limit
+// Their speeds cover 360 degrees
 function createSparkles() {
   let x, y, radius, lineWidth, theta, dx, dy, a, cutBy, obj, limit, color;
 
@@ -472,6 +491,7 @@ function createSparkles() {
     dx = randRange(2, 3) * Math.cos(theta);
     dy = randRange(2, 3) * -Math.sin(theta);
     color = "white";
+
     obj[index] = new Ball(
       index,
       x,
@@ -501,15 +521,18 @@ function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
+  // Updating set of set of sparkcles
   for (let obj of temp) {
     updateObject(obj);
   }
 
+  // Creating new set for every 'time'
   if (i % time === 0) {
     i = 0;
     temp.push(createSparkles());
   }
 
+  // When set of 360 sets increase by 15 then delete the very first one
   if (temp.length >= 15) {
     temp.shift();
   }
