@@ -462,8 +462,8 @@ function createSparkles() {
   x = mouse.x;
   y = mouse.y;
   lineWidth = 1;
-  a = 0.02;
-  cutBy = 0.03;
+  a = 0.05;
+  cutBy = 0.02;
   limit = 70;
 
   for (let i = 1; i <= limit; i++) {
@@ -494,8 +494,6 @@ function createSparkles() {
 let temp = [];
 let i = 1,
   time = 5;
-let i2 = 1,
-  time2 = 10;
 
 temp.push(createSparkles());
 
@@ -512,11 +510,9 @@ function animate() {
     temp.push(createSparkles());
   }
 
-  if (temp.length >= 50) {
-    i2 = 1;
+  if (temp.length >= 15) {
     temp.shift();
   }
   i++;
-  i2++;
 }
 animate();

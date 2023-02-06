@@ -356,7 +356,7 @@ maxify();
 let mouse, ball, ballObject, ballCount;
 ballObject = {};
 ballCount = 0;
-mouse = { x: 0, y: 0, radius: 20 };
+mouse = { x: 0, y: 0, radius: 80 };
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -378,8 +378,8 @@ class Ball {
     y = middleY(),
     radius = 90,
     linewidth = 1,
-    lineColor = "black",
-    fillColor = "black",
+    lineColor = "white",
+    fillColor = "white",
 
     dx = 1,
     dy = 1
@@ -402,9 +402,20 @@ class Ball {
   }
 
   createMultipleChildren() {
-    this.createChild(this.dx, positive(this.dy));
+    this.createChild(
+      randRange(1, 1.25) * this.dx,
+      randRange(1, 1.25) * positive(this.dy)
+    );
 
-    this.createChild(this.dx, negative(this.dy));
+    this.createChild(
+      randRange(1, 1.25) * this.dx,
+      randRange(1, 1.25) * negative(this.dy)
+    );
+
+    this.createChild(
+      randRange(1.1, 1, 2) * this.dx,
+      randRange(1.1, 1, 2) * negative(this.dy)
+    );
   }
 
   createChild(dx = this.dx, dy = this.dy) {
@@ -481,7 +492,7 @@ class Ball {
     this.updatePrevNext();
 
     if (this.detectFirstCollision()) {
-      if (this.limit === 0 && this.radius >= 5) {
+      if (this.limit === 0 && this.radius >= 15) {
         this.createMultipleChildren();
         delete ballObject[this.i];
       }
@@ -501,8 +512,8 @@ function createNewBallObject(
   y = middleY(),
   radius = 90,
   linewidth = 1,
-  lineColor = "black",
-  fillColor = "black",
+  lineColor = "white",
+  fillColor = "white",
 
   dx = randRange(3, 5),
   dy = randRange(3, 5)
@@ -524,7 +535,7 @@ function createNewBallObject(
 createNewBallObject();
 function animate() {
   requestAnimationFrame(animate);
-  fillCanvas("white");
+  fillCanvas("black");
 
   updateObject(ballObject);
 
@@ -533,8 +544,8 @@ function animate() {
     mouse.y,
     mouse.radius,
     0,
-    "rgba(0,0,0,0.15)",
-    "rgba(0,0,0,0.15)"
+    "rgba(256, 256, 256,0.15)",
+    "rgba(256, 256, 256,0.15)"
   );
 }
 animate();

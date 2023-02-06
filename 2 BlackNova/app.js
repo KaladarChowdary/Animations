@@ -422,7 +422,7 @@ class Planet {
 }
 
 class BlackNova {
-  constructor(x = middleX(), y = middleY(), radius = 5, color = "Black") {
+  constructor(x = middleX(), y = middleY(), radius = 5, color = "grey") {
     this.x = x;
     this.y = y;
     this.radius = radius;
@@ -479,14 +479,13 @@ planets = objectsOfClass(Planet, no);
 blackNova = new BlackNova();
 function animate() {
   requestAnimationFrame(animate);
-  fillCanvas("white");
+  fillCanvas("black");
 
   updateObject(planets);
-  for (let key of Object.keys(planets)) {
-    // if (randomTrueFalse()) {
-    //   delete planets[key];
-    // }
-  }
   blackNova.update();
+  if (Object.keys(planets).length === 0) {
+    planets = objectsOfClass(Planet, no);
+    blackNova = new BlackNova();
+  }
 }
 animate();
