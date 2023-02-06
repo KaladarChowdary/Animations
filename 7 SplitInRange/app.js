@@ -401,17 +401,39 @@ class Ball {
     this.limit = 50;
   }
 
+  splitWhenConditionsRight() {
+    if (this.radius > 10 && this.limit === 0 && this.crossedX()) {
+      this.birthTwinChildren();
+      this.deleteCurrentObject();
+    }
+  }
+
   // Creates twin children and adds to same object
   // Twin children are created from original objects properties
   birthTwinChildren() {
     createTwinBalls(this.x, this.y, this.radius, this.dx, this.dy);
   }
 
+  // Deletes the current object
+  deleteCurrentObject() {
+    delete ballObject[this.i];
+  }
+
+  // Checks whether it crossed verticle line at X or not
+  crossedX() {
+    return (
+      (this.x + this.radius > X && this.x + this.radius - this.dx < X) ||
+      (this.x - this.radius < X && this.x - this.radius - this.dx > X)
+    );
+  }
+
+  // Adds velocities to x and y
   updateXY() {
     this.x += this.dx;
     this.y += this.dy;
   }
 
+  // Bounces off canvas edges
   bounceOnCollision() {
     if (this.x + this.radius >= canvas.width) {
       this.dx = negative(this.dx);
@@ -426,6 +448,7 @@ class Ball {
     }
   }
 
+  // Draws the ball simply
   draw() {
     drawBall(
       this.x,
@@ -437,6 +460,7 @@ class Ball {
     );
   }
 
+  // Decreasing counter; getting it close to zero
   updateLimit() {
     if (this.limit > 0) {
       this.limit -= 1;
@@ -445,16 +469,7 @@ class Ball {
 
   update() {
     this.updateLimit();
-
-    if (
-      this.radius > 10 &&
-      this.limit === 0 &&
-      ((this.x + this.radius > X && this.x + this.radius - this.dx < X) ||
-        (this.x - this.radius < X && this.x - this.radius - this.dx > X))
-    ) {
-      this.birthTwinChildren();
-      delete ballObject[this.i];
-    }
+    this.splitWhenConditionsRight();
 
     this.bounceOnCollision();
     this.updateXY();
@@ -469,8 +484,8 @@ class Ball {
 // Initial position and velocity with direction included
 // It's color too. All are initially provided
 function createNewBallObject(
-  x = middleX(),
-  y = middleY(),
+  x = 95,
+  y = 95,
   radius = 90,
   linewidth = 1,
   lineColor = "black",
@@ -493,6 +508,9 @@ function createNewBallObject(
   ballCount++;
 }
 
+// Creates twin balls with particular properties
+// Twin balls go faster than parent
+// And they separate as they go
 function createTwinBalls(x, y, radius, dx, dy) {
   let radius2 = (3 * radius) / 4;
   let color = randomColor();
