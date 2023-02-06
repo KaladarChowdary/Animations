@@ -362,11 +362,7 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: undefined, y: undefined };
-let squareX, squareY, circleX, circleY, cColor, sColor, length, breadth, radius;
-squareX = middleX();
-squareY = middleY();
-sColor = "green";
-cColor = "red";
+let ball, box;
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
@@ -514,11 +510,11 @@ class Square {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-let temp = new Ball();
+ball = new Ball();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  temp.update();
+  ball.update();
 }
 animate();
