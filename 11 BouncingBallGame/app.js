@@ -375,11 +375,10 @@ window.addEventListener("resize", function () {
 });
 
 window.addEventListener("keydown", function (evt) {
-  box.color = randomColor();
   if (evt.key === "ArrowRight") {
-    console.log("Move to right");
+    box.moveRight();
   } else if (evt.key === "ArrowLeft") {
-    console.log("Move to left");
+    box.moveLeft();
   }
 });
 
@@ -493,6 +492,27 @@ class Box {
     this.y = endY() - height;
 
     this.color = color;
+
+    this.getDx();
+  }
+
+  // Moves left, always returns lesser number or zero
+  // Very safe interms of visual
+  moveLeft() {
+    this.x -= this.dx;
+    this.x = Math.max(this.x, 0);
+  }
+
+  // Increases value of x and returns
+  // Corner will not go outside of canvas
+  moveRight() {
+    this.x += this.dx;
+    this.x = Math.min(this.x, canvas.width - this.length);
+  }
+
+  // Gets appropriate movement speed
+  getDx() {
+    this.dx = 5;
   }
 
   // Just runs draw function
