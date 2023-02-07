@@ -385,7 +385,7 @@ window.addEventListener("keydown", function (evt) {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
 class Ball {
-  constructor(x = middleX(), y = middleY(), radius = 10, fillColor = "white") {
+  constructor(x = middleX(), y = middleY(), radius = 10, fillColor = "red") {
     this.x = x;
     this.y = y;
     this.radius = radius;
@@ -425,14 +425,14 @@ class Ball {
 
   // Get's random speed for x and y
   getRandomSpeed() {
-    this.dx = 0.5;
-    this.dy = 0.5;
+    this.dx = randRange(-3, 3);
+    this.dy = randRange(-3, 3);
   }
 
   // Updates position and draws ball
   update() {
-    this.followMouse();
-    // this.updateXY();
+    // this.followMouse();
+    this.updateXY();
     this.draw();
   }
 
@@ -446,21 +446,30 @@ class Box {
   // Takes length and height and color
   // Calculates x and y based on length and height
   // Square of size 'length' with only 'height' of verticle part visible
-  constructor(length = 80, height = 75, color = "white") {
+  constructor(
+    length = 65,
+    height = 25,
+    color = "white",
+    dx = 5,
+    accelaration = 1
+  ) {
     this.length = length;
 
-    this.x = middleX();
-    this.y = middleY();
+    this.x = 0;
+    this.y = endY() - height;
 
     this.color = color;
 
-    this.getDx();
+    this.dx = dx;
+    this.originalDx = dx;
+    this.accelaration = accelaration;
   }
 
   // Moves left, always returns lesser number or zero
   // Very safe interms of visual
   moveLeft() {
     this.x -= this.dx;
+    this.dx += this.accelaration;
     this.x = Math.max(this.x, 0);
   }
 
@@ -468,12 +477,9 @@ class Box {
   // Corner will not go outside of canvas
   moveRight() {
     this.x += this.dx;
-    this.x = Math.min(this.x, canvas.width - this.length);
-  }
+    this.dx += this.accelaration;
 
-  // Gets appropriate movement speed
-  getDx() {
-    this.dx = 5;
+    this.x = Math.min(this.x, canvas.width - this.length);
   }
 
   // Just runs draw function
@@ -520,6 +526,30 @@ function getSideOfCollision(angle) {
   }
 }
 
+function updateDxDyAngle(side, dx, dy) {
+  switch (side) {
+    case "top":
+      return [dx, negative(dy)];
+    case "bottom":
+      return [dx, positive(dy)];
+    case "right":
+      return [positive(dx), dy];
+    case "left":
+      return [negative(dx), dy];
+    case "topright":
+      return [positive(dx), negative(dy)];
+    case "topleft":
+      return [negative(dx), negative(dy)];
+    case "bottomright":
+      return [positive(dx), positive(dy)];
+    case "bottomleft":
+      return [negative(dx), positive(dy)];
+
+    default:
+      return [dx, dy];
+  }
+}
+
 function updateDirectionOnCollision(ball, box) {
   if (
     !circleAwayFromSquare(ball.x, ball.y, ball.radius, box.x, box.y, box.length)
@@ -532,11 +562,9 @@ function updateDirectionOnCollision(ball, box) {
       ball.x,
       ball.y
     );
-
     side = getSideOfCollision(angle);
-    console.log(side);
 
-    ball.dy = negative(ball.dy);
+    [ball.dx, ball.dy] = updateDxDyAngle(side, ball.dx, ball.dy);
   }
 }
 
@@ -546,18 +574,8 @@ function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  // ball.x = mouse.x;
-  // ball.y = mouse.y;
-  ball.update();
   box.update();
-
+  ball.update();
   updateDirectionOnCollision(ball, box);
-  drawLineSegment(
-    box.x + box.length / 2,
-    box.y + box.length / 2,
-    ball.x,
-    ball.y,
-    "red"
-  );
 }
 animate();
