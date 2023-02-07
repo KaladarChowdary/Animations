@@ -385,20 +385,11 @@ window.addEventListener("keydown", function (evt) {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
 class Ball {
-  constructor(
-    x = middleX(),
-    y = middleY(),
-    radius = 10,
-    fillColor = "white",
-    lineColor = "white",
-    lineWidth = 1
-  ) {
+  constructor(x = middleX(), y = middleY(), radius = 10, fillColor = "white") {
     this.x = x;
     this.y = y;
     this.radius = radius;
-    this.fillColor = fillColor;
-    this.lineColor = lineColor;
-    this.lineWidth = lineWidth;
+    this.color = fillColor;
 
     this.getRandomSpeed();
   }
@@ -434,50 +425,7 @@ class Ball {
   }
 
   draw() {
-    drawBall(
-      this.x,
-      this.y,
-      this.radius,
-      this.fillColor,
-      this.lineColor,
-      this.lineWidth
-    );
-  }
-}
-
-class Rectangle {
-  constructor(
-    x = middleX(),
-    y = middleY(),
-    length = 100,
-    breadth = 50,
-    fillColor = "white",
-    lineColor = "white",
-    lineWidth = 1
-  ) {
-    this.x = x;
-    this.y = y;
-    this.length = length;
-    this.breadth = breadth;
-    this.fillColor = fillColor;
-    this.lineColor = lineColor;
-    this.lineWidth = lineWidth;
-  }
-
-  update() {
-    this.draw();
-  }
-
-  draw() {
-    fillRectangle(
-      this.x,
-      this.y,
-      this.length,
-      this.breadth,
-      this.fillColor,
-      this.lineColor,
-      this.lineWidth
-    );
+    drawBall(this.x, this.y, this.radius, this.color);
   }
 }
 
@@ -541,6 +489,12 @@ box = new Box();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
+
+  if (
+    !circleAwayFromSquare(ball.x, ball.y, ball.radius, box.x, box.y, box.length)
+  ) {
+    ball.dy = negative(ball.dy);
+  }
 
   ball.update();
   box.update();
