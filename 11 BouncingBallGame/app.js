@@ -394,6 +394,12 @@ class Ball {
     this.getRandomSpeed();
   }
 
+  // Follow Mouse
+  followMouse() {
+    this.x = mouse.x;
+    this.y = mouse.y;
+  }
+
   // Bounces when striked to border
   bounceOffCanvasBorders() {
     if (this.x + this.radius >= canvas.width) {
@@ -419,13 +425,14 @@ class Ball {
 
   // Get's random speed for x and y
   getRandomSpeed() {
-    this.dx = randRange(1, 3);
-    this.dy = randRange(1, 3);
+    this.dx = 0.5;
+    this.dy = 0.5;
   }
 
   // Updates position and draws ball
   update() {
-    this.updateXY();
+    this.followMouse();
+    // this.updateXY();
     this.draw();
   }
 
@@ -490,10 +497,44 @@ class Box {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
+// Returns top, bottom, left, right based on angle
+// Angle is in degrees. From 0 to 360
+function getSideOfCollision(angle) {
+  if (angle > 90 - 45 && angle < 90 + 45) {
+    return "top";
+  } else if (angle > 180 - 45 && angle < 180 + 45) {
+    return "left";
+  } else if (angle > 275 - 45 && angle < 275 + 45) {
+    return "bottom";
+  } else if (angle < 45 || angle > 270 + 45) {
+    return "right";
+  } else if (angle === 90 - 45) {
+    return "topright";
+  } else if (angle === 90 + 45) {
+    return "topleft";
+  } else if (angle === 270 - 45) {
+    return "bottomleft";
+  } else if (angle === 270 + 45) {
+    return "bottomright";
+  }
+}
+
 function updateDirectionOnCollision(ball, box) {
   if (
     !circleAwayFromSquare(ball.x, ball.y, ball.radius, box.x, box.y, box.length)
   ) {
+    let angle, side;
+
+    angle = getAngleInDegrees(
+      box.x + box.length / 2,
+      box.y + box.length / 2,
+      ball.x,
+      ball.y
+    );
+
+    side = getSideOfCollision(angle);
+    console.log(side);
+
     ball.dy = negative(ball.dy);
   }
 }
@@ -504,8 +545,11 @@ function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  updateDirectionOnCollision(ball, box);
+  // ball.x = mouse.x;
+  // ball.y = mouse.y;
   ball.update();
   box.update();
+
+  updateDirectionOnCollision(ball, box);
 }
 animate();
