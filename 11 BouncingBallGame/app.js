@@ -374,6 +374,15 @@ window.addEventListener("resize", function () {
   maxify();
 });
 
+window.addEventListener("keydown", function (evt) {
+  box.color = randomColor();
+  if (evt.key === "ArrowRight") {
+    console.log("Move to right");
+  } else if (evt.key === "ArrowLeft") {
+    console.log("Move to left");
+  }
+});
+
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
 class Ball {
@@ -473,36 +482,33 @@ class Rectangle {
   }
 }
 
-class Square {
-  constructor(
-    x = middleX(),
-    y = middleY(),
-    length = 100,
-    fillColor = "white",
-    lineColor = "white",
-    lineWidth = 1
-  ) {
-    this.x = x;
-    this.y = y;
+class Box {
+  // Takes length and height and color
+  // Calculates x and y based on length and height
+  // Square of size 'length' with only 'height' of verticle part visible
+  constructor(length = 80, height = 25, color = "white") {
     this.length = length;
-    this.fillColor = fillColor;
-    this.lineColor = lineColor;
-    this.lineWidth = lineWidth;
+
+    this.x = 0;
+    this.y = endY() - height;
+
+    this.color = color;
   }
 
+  // Just runs draw function
   update() {
     this.draw();
   }
 
+  // Draws the square with given parameters
   draw() {
     fillRectangle(
       this.x,
       this.y,
       this.length,
       this.length,
-      this.fillColor,
-      this.lineColor,
-      this.lineWidth
+      this.color,
+      this.color
     );
   }
 }
@@ -511,10 +517,12 @@ class Square {
 // ANIMATE
 
 ball = new Ball();
+box = new Box();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
   ball.update();
+  box.update();
 }
 animate();
