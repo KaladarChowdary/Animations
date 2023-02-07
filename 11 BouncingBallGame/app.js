@@ -362,7 +362,8 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: middleX(), y: middleY() };
-let ball, box;
+let ball, box, score;
+score = 0;
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
@@ -380,6 +381,10 @@ window.addEventListener("keydown", function (evt) {
   } else if (evt.key === "ArrowLeft") {
     box.moveLeft();
   }
+});
+
+window.addEventListener("keyup", function (evt) {
+  box.setOriginalDx();
 });
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -451,7 +456,7 @@ class Box {
     height = 25,
     color = "white",
     dx = 5,
-    accelaration = 1
+    accelaration = 2
   ) {
     this.length = length;
 
@@ -463,6 +468,11 @@ class Box {
     this.dx = dx;
     this.originalDx = dx;
     this.accelaration = accelaration;
+  }
+
+  // Get's original speed
+  setOriginalDx() {
+    this.dx = this.originalDx;
   }
 
   // Moves left, always returns lesser number or zero
@@ -550,7 +560,7 @@ function updateDxDyAngle(side, dx, dy) {
   }
 }
 
-function updateDirectionOnCollision(ball, box) {
+function updateOnCollison(ball, box) {
   if (
     !circleAwayFromSquare(ball.x, ball.y, ball.radius, box.x, box.y, box.length)
   ) {
@@ -565,7 +575,27 @@ function updateDirectionOnCollision(ball, box) {
     side = getSideOfCollision(angle);
 
     [ball.dx, ball.dy] = updateDxDyAngle(side, ball.dx, ball.dy);
+
+    ball.dx = 1.05 * ball.dx;
+    ball.dy = 1.05 * ball.dy;
+    increaseScore();
   }
+}
+
+function displayScore(score = 0) {
+  ctx.beginPath();
+  ctx.font = "15px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText(`SCORE : ${score}`, 10, 20);
+  ctx.closePath();
+}
+
+function increaseScore() {
+  score++;
+}
+
+function resetScore() {
+  score = 0;
 }
 
 ball = new Ball();
@@ -573,9 +603,10 @@ box = new Box();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
+  displayScore(score);
 
   box.update();
   ball.update();
-  updateDirectionOnCollision(ball, box);
+  updateOnCollison(ball, box);
 }
 animate();
