@@ -394,6 +394,7 @@ class Ball {
     this.getRandomSpeed();
   }
 
+  // Bounces when striked to border
   bounceOffCanvasBorders() {
     if (this.x + this.radius >= canvas.width) {
       this.dx = negative(this.dx);
@@ -408,22 +409,27 @@ class Ball {
     }
   }
 
+  // Bounces if strikes border
+  // Then adds position
   updateXY() {
     this.bounceOffCanvasBorders();
     this.x += this.dx;
     this.y += this.dy;
   }
 
+  // Get's random speed for x and y
   getRandomSpeed() {
     this.dx = randRange(1, 3);
     this.dy = randRange(1, 3);
   }
 
+  // Updates position and draws ball
   update() {
     this.updateXY();
     this.draw();
   }
 
+  // Draws the ball
   draw() {
     drawBall(this.x, this.y, this.radius, this.color);
   }
@@ -433,7 +439,7 @@ class Box {
   // Takes length and height and color
   // Calculates x and y based on length and height
   // Square of size 'length' with only 'height' of verticle part visible
-  constructor(length = 80, height = 25, color = "white") {
+  constructor(length = 80, height = 75, color = "white") {
     this.length = length;
 
     this.x = 0;
@@ -484,18 +490,21 @@ class Box {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
+function updateDirectionOnCollision(ball, box) {
+  if (
+    !circleAwayFromSquare(ball.x, ball.y, ball.radius, box.x, box.y, box.length)
+  ) {
+    ball.dy = negative(ball.dy);
+  }
+}
+
 ball = new Ball();
 box = new Box();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  if (
-    !circleAwayFromSquare(ball.x, ball.y, ball.radius, box.x, box.y, box.length)
-  ) {
-    ball.dy = negative(ball.dy);
-  }
-
+  updateDirectionOnCollision(ball, box);
   ball.update();
   box.update();
 }
