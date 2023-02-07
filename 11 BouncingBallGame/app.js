@@ -361,7 +361,7 @@ function circleAwayFromRectangle(cX, cY, cR, x2, y2, length2, breadth2) {
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
-let mouse = { x: undefined, y: undefined };
+let mouse = { x: middleX(), y: middleY() };
 let ball, box;
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -449,8 +449,8 @@ class Box {
   constructor(length = 80, height = 75, color = "white") {
     this.length = length;
 
-    this.x = 0;
-    this.y = endY() - height;
+    this.x = middleX();
+    this.y = middleY();
 
     this.color = color;
 
@@ -500,11 +500,12 @@ class Box {
 // Returns top, bottom, left, right based on angle
 // Angle is in degrees. From 0 to 360
 function getSideOfCollision(angle) {
+  angle = Math.trunc(angle);
   if (angle > 90 - 45 && angle < 90 + 45) {
     return "top";
   } else if (angle > 180 - 45 && angle < 180 + 45) {
     return "left";
-  } else if (angle > 275 - 45 && angle < 275 + 45) {
+  } else if (angle > 270 - 45 && angle < 270 + 45) {
     return "bottom";
   } else if (angle < 45 || angle > 270 + 45) {
     return "right";
@@ -551,5 +552,12 @@ function animate() {
   box.update();
 
   updateDirectionOnCollision(ball, box);
+  drawLineSegment(
+    box.x + box.length / 2,
+    box.y + box.length / 2,
+    ball.x,
+    ball.y,
+    "red"
+  );
 }
 animate();
