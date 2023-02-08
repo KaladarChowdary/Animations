@@ -362,7 +362,8 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: undefined, y: undefined };
-let Cooridnates, squareArray, size, gap;
+let Cooridnates, squareArray, size, gap, square;
+let mouseOnCanvas = false;
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -375,6 +376,16 @@ window.addEventListener("resize", function () {
   maxify();
 
   squareArray = CreateSquareArray(size, gap);
+});
+
+canvas.addEventListener("mouseenter", function () {
+  console.log("mouse entered");
+  mouseOnCanvas = true;
+});
+
+canvas.addEventListener("mouseleave", function () {
+  console.log("mouse left");
+  mouseOnCanvas = false;
 });
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -497,7 +508,7 @@ class Square {
 // ANIMATE
 
 size = 15;
-gap = 3;
+gap = 6;
 
 function CreateSquareArray(size = 10, gap = 3) {
   Cooridnates = giveCoordinatesArray(size, gap);
@@ -515,6 +526,14 @@ function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  updateArray(squareArray);
+  squareArray.forEach((square) => {
+    square.update();
+  });
+
+  if (mouseOnCanvas) {
+    console.log(mouseOnCanvas);
+  } else {
+    console.log(mouseOnCanvas);
+  }
 }
 animate();
