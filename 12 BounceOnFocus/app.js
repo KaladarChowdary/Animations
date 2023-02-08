@@ -362,11 +362,8 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: undefined, y: undefined };
-let squareX, squareY, circleX, circleY, cColor, sColor, length, breadth, radius;
-squareX = middleX();
-squareY = middleY();
-sColor = "green";
-cColor = "red";
+let Cooridnates, BallArray, size, gap;
+
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
@@ -483,15 +480,13 @@ class Square {
     y = middleY(),
     length = 100,
     fillColor = "white",
-    lineColor = "white",
-    lineWidth = 1
+    lineColor = "white"
   ) {
     this.x = x;
     this.y = y;
     this.length = length;
     this.fillColor = fillColor;
     this.lineColor = lineColor;
-    this.lineWidth = lineWidth;
   }
 
   update() {
@@ -505,8 +500,7 @@ class Square {
       this.length,
       this.length,
       this.fillColor,
-      this.lineColor,
-      this.lineWidth
+      this.lineColor
     );
   }
 }
@@ -514,13 +508,14 @@ class Square {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-let temp = new Ball();
-let temp2 = new Square();
+size = 10;
+gap = 3;
+
+Cooridnates = giveCoordinatesArray(size, gap);
+console.log(Cooridnates);
+
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
-
-  temp.update();
-  temp2.update();
 }
 animate();
