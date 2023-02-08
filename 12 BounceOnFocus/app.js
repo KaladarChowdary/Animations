@@ -361,9 +361,13 @@ function circleAwayFromRectangle(cX, cY, cR, x2, y2, length2, breadth2) {
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
-let mouse = { x: undefined, y: undefined };
+let mouse = { x: middleX(), y: middleY() };
 let Cooridnates, squareArray, size, gap, square;
-let mouseOnCanvas = false;
+let mouseOnCanvas, scolor, pcolor, ballcolor;
+mouseOnCanvas = false;
+scolor = "white";
+pcolor = "green";
+ballcolor = "red";
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -379,12 +383,10 @@ window.addEventListener("resize", function () {
 });
 
 canvas.addEventListener("mouseenter", function () {
-  console.log("mouse entered");
   mouseOnCanvas = true;
 });
 
 canvas.addEventListener("mouseleave", function () {
-  console.log("mouse left");
   mouseOnCanvas = false;
 });
 
@@ -488,19 +490,36 @@ class Rectangle {
 }
 
 class Square {
-  constructor(x = middleX(), y = middleY(), length = 100, fillColor = "white") {
+  constructor(x = middleX(), y = middleY(), length = 100, color = "white") {
     this.x = x;
     this.y = y;
     this.length = length;
-    this.fillColor = fillColor;
+    this.color = color;
+  }
+
+  reactToMouse() {
+    if (this.isMouseInside()) {
+      this.color = pcolor;
+    } else {
+      this.color = scolor;
+    }
+  }
+
+  isMouseInside() {
+    if (mouseOnCanvas) {
+      return isPointInsideSquare(mouse.x, mouse.y, this.x, this.y, this.length);
+    } else {
+      return false;
+    }
   }
 
   update() {
+    this.reactToMouse();
     this.draw();
   }
 
   draw() {
-    fillRectangle(this.x, this.y, this.length, this.length, this.fillColor);
+    fillRectangle(this.x, this.y, this.length, this.length, this.color);
   }
 }
 
@@ -514,7 +533,7 @@ function CreateSquareArray(size = 10, gap = 3) {
   Cooridnates = giveCoordinatesArray(size, gap);
   arr = [];
   for (let [x, y] of Cooridnates) {
-    arr.push(new Square(x, y, size, "white"));
+    arr.push(new Square(x, y, size, scolor));
   }
 
   return arr;
@@ -526,14 +545,6 @@ function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  squareArray.forEach((square) => {
-    square.update();
-  });
-
-  if (mouseOnCanvas) {
-    console.log(mouseOnCanvas);
-  } else {
-    console.log(mouseOnCanvas);
-  }
+  updateArray(squareArray);
 }
 animate();
