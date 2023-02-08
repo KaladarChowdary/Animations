@@ -362,8 +362,9 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: middleX(), y: middleY() };
-let ball, box, score;
+let ball, box, score, gameOn;
 score = 0;
+gameOn = true;
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
@@ -373,6 +374,7 @@ window.addEventListener("mousemove", function (evt) {
 
 window.addEventListener("resize", function () {
   maxify();
+  box = new Box();
 });
 
 window.addEventListener("keydown", function (evt) {
@@ -380,17 +382,20 @@ window.addEventListener("keydown", function (evt) {
     box.moveRight();
   } else if (evt.key === "ArrowLeft") {
     box.moveLeft();
+  } else if (evt.key === "Enter") {
+    gameOn = true;
+    animate();
   }
 });
 
 window.addEventListener("keyup", function (evt) {
-  box.setOriginalDx();
+  box.setDx(15);
 });
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
 class Ball {
-  constructor(x = middleX(), y = middleY(), radius = 10, fillColor = "red") {
+  constructor(x = middleX(), y = middleY(), radius = 20, fillColor = "red") {
     this.x = x;
     this.y = y;
     this.radius = radius;
@@ -430,8 +435,8 @@ class Ball {
 
   // Get's random speed for x and y
   getRandomSpeed() {
-    this.dx = randRange(-3, 3);
-    this.dy = randRange(-3, 3);
+    this.dx = randRange(1, 2);
+    this.dy = randRange(1, 2);
   }
 
   // Updates position and draws ball
@@ -455,8 +460,8 @@ class Box {
     length = 65,
     height = 25,
     color = "white",
-    dx = 5,
-    accelaration = 2
+    dx = 15,
+    accelaration = 1
   ) {
     this.length = length;
 
@@ -470,26 +475,33 @@ class Box {
     this.accelaration = accelaration;
   }
 
-  // Get's original speed
-  setOriginalDx() {
-    this.dx = this.originalDx;
+  accelarate() {
+    this.dx += this.accelaration;
+    this.dx = Math.min(this.dx, 2 * this.originalDx);
+  }
+
+  setDx(number) {
+    if (number <= 15) return;
+    this.dx = number;
+    this.originalDx = number;
   }
 
   // Moves left, always returns lesser number or zero
   // Very safe interms of visual
   moveLeft() {
     this.x -= this.dx;
-    this.dx += this.accelaration;
     this.x = Math.max(this.x, 0);
+
+    this.accelarate();
   }
 
   // Increases value of x and returns
   // Corner will not go outside of canvas
   moveRight() {
     this.x += this.dx;
-    this.dx += this.accelaration;
-
     this.x = Math.min(this.x, canvas.width - this.length);
+
+    this.accelarate();
   }
 
   // Just runs draw function
@@ -576,8 +588,11 @@ function updateOnCollison(ball, box) {
 
     [ball.dx, ball.dy] = updateDxDyAngle(side, ball.dx, ball.dy);
 
-    ball.dx = 1.05 * ball.dx;
-    ball.dy = 1.05 * ball.dy;
+    if (ball.dx < 10) {
+      ball.dx = 1.05 * ball.dx;
+      ball.dy = 1.05 * ball.dy;
+      box.setDx(positive(2 * ball.dx));
+    }
     increaseScore();
   }
 }
@@ -598,15 +613,46 @@ function resetScore() {
   score = 0;
 }
 
+function endScreen() {
+  let x = middleX() - 100;
+  let y = middleY() - 50;
+  ctx.beginPath();
+
+  ctx.font = "30px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText(`GAME OVER`, x, y);
+
+  ctx.font = "20px Arial";
+  ctx.fillStyle = "red";
+  ctx.fillText(`Your Score : ${score}`, x, y + 50);
+
+  ctx.font = "15px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText(`Press 'Enter' to restart`, x, y + 100);
+
+  ctx.closePath();
+}
+
 ball = new Ball();
 box = new Box();
 function animate() {
-  requestAnimationFrame(animate);
-  fillCanvas("black");
-  displayScore(score);
+  if (gameOn) {
+    requestAnimationFrame(animate);
+    fillCanvas("black");
+    displayScore(score);
 
-  box.update();
-  ball.update();
-  updateOnCollison(ball, box);
+    box.update();
+    ball.update();
+    updateOnCollison(ball, box);
+
+    if (ball.y + ball.radius >= canvas.height) {
+      gameOn = false;
+      fillCanvas("black");
+      endScreen();
+      resetScore();
+      ball = new Ball();
+      box = new Box();
+    }
+  }
 }
 animate();
