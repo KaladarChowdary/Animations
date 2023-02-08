@@ -373,6 +373,8 @@ window.addEventListener("mousemove", function (evt) {
 
 window.addEventListener("resize", function () {
   maxify();
+
+  squareArray = CreateSquareArray(size, gap);
 });
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -475,18 +477,11 @@ class Rectangle {
 }
 
 class Square {
-  constructor(
-    x = middleX(),
-    y = middleY(),
-    length = 100,
-    fillColor = "white",
-    lineColor = "white"
-  ) {
+  constructor(x = middleX(), y = middleY(), length = 100, fillColor = "white") {
     this.x = x;
     this.y = y;
     this.length = length;
     this.fillColor = fillColor;
-    this.lineColor = lineColor;
   }
 
   update() {
@@ -494,28 +489,27 @@ class Square {
   }
 
   draw() {
-    fillRectangle(
-      this.x,
-      this.y,
-      this.length,
-      this.length,
-      this.fillColor,
-      this.lineColor
-    );
+    fillRectangle(this.x, this.y, this.length, this.length, this.fillColor);
   }
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-size = 10;
+size = 15;
 gap = 3;
 
-Cooridnates = giveCoordinatesArray(size, gap);
-squareArray = [];
-for (let [x, y] of Cooridnates) {
-  squareArray.push(new Square(x, y, size, "white", "red"));
+function CreateSquareArray(size = 10, gap = 3) {
+  Cooridnates = giveCoordinatesArray(size, gap);
+  arr = [];
+  for (let [x, y] of Cooridnates) {
+    arr.push(new Square(x, y, size, "white"));
+  }
+
+  return arr;
 }
+
+squareArray = CreateSquareArray(size, gap);
 
 function animate() {
   requestAnimationFrame(animate);
