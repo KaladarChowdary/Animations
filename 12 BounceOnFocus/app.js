@@ -362,7 +362,7 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: undefined, y: undefined };
-let Cooridnates, BallArray, size, gap;
+let Cooridnates, squareArray, size, gap;
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -512,10 +512,15 @@ size = 10;
 gap = 3;
 
 Cooridnates = giveCoordinatesArray(size, gap);
-console.log(Cooridnates);
+squareArray = [];
+for (let [x, y] of Cooridnates) {
+  squareArray.push(new Square(x, y, size, "white", "red"));
+}
 
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
+
+  updateArray(squareArray);
 }
 animate();
