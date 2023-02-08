@@ -515,10 +515,12 @@ class Square {
 // ANIMATE
 
 let temp = new Ball();
+let temp2 = new Square();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
   temp.update();
+  temp2.update();
 }
 animate();
