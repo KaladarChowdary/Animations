@@ -399,6 +399,42 @@ class Ball {
     this.radius = radius;
     this.color = color;
     this.getRandomSpeed();
+
+    this.current = false;
+  }
+
+  ballNotHereBefore(square) {
+    return circleAwayFromSquare(
+      this.x - this.dx,
+      this.y - this.dy,
+      this.radius,
+      square.x,
+      square.y,
+      square.length
+    );
+  }
+
+  reactToSolid() {
+    this.color = "green";
+    for (let sqr of squareArray) {
+      if (sqr.solid) {
+        if (
+          !circleAwayFromSquare(
+            this.x,
+            this.y,
+            this.radius,
+            sqr.x,
+            sqr.y,
+            sqr.length
+          )
+        ) {
+          if (this.ballNotHereBefore(sqr)) {
+            console.log("strike");
+            this.color = "black";
+          }
+        }
+      }
+    }
   }
 
   bounceOffCanvasBorders() {
@@ -427,6 +463,7 @@ class Ball {
   }
 
   update() {
+    this.reactToSolid();
     this.updateXY();
     this.draw();
   }
@@ -522,7 +559,7 @@ function CreateSquareArray(size = 10, gap = 3) {
 
   return arr;
 }
-size = 20;
+size = 50;
 gap = 6;
 squareArray = CreateSquareArray(size, gap);
 
@@ -534,23 +571,5 @@ function animate() {
 
   updateArray(squareArray);
   ball.update();
-
-  ball.color = "green";
-  for (let sq of squareArray) {
-    if (sq.solid) {
-      if (
-        !circleAwayFromSquare(
-          ball.x,
-          ball.y,
-          ball.radius,
-          sq.x,
-          sq.y,
-          sq.length
-        )
-      ) {
-        ball.color = "pink";
-      }
-    }
-  }
 }
 animate();
