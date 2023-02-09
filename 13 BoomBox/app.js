@@ -362,11 +362,7 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: undefined, y: undefined };
-let squareX, squareY, circleX, circleY, cColor, sColor, length, breadth, radius;
-squareX = middleX();
-squareY = middleY();
-sColor = "green";
-cColor = "red";
+let ballArray;
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
@@ -423,14 +419,11 @@ class Ball {
   }
 
   updateXY() {
-    console.log(1, this.dy);
     this.accelarate();
-    console.log(2, this.dy);
     this.x += this.dx;
     this.y += this.dy;
     this.y = Math.min(canvas.height - this.radius, this.y);
     this.bounceOffCanvasBorders();
-    console.log(3, this.dy);
   }
 
   getRandomSpeed() {
@@ -521,11 +514,34 @@ class Ball {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-let temp = new Ball();
+function createBallArray(n) {
+  let radius, x, y, color, dx, dy, a, friction, arr;
+
+  arr = [];
+  for (let i = 0; i < n; i++) {
+    radius = randRange(1, 5);
+    x = getAcceptableX(radius);
+    y = randRange(radius, middleY());
+    color = randomColor();
+
+    dx = randomSign() * randRange(1, 2);
+    dy = randomSign() * randRange(1, 2);
+
+    a = randRange(0.5, 1);
+    friction = randRange(0.5, 1);
+
+    arr.push(new Ball(x, y, radius, color, dx, dy, a, friction));
+  }
+
+  return arr;
+}
+
+ballArray = createBallArray(100);
+console.log(ballArray);
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  temp.update();
+  updateArray(ballArray);
 }
 animate();
