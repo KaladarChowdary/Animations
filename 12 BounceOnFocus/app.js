@@ -559,6 +559,77 @@ function CreateSquareArray(size = 10, gap = 3) {
 
   return arr;
 }
+
+function getSideOfCollision(angle) {
+  angle = Math.trunc(angle);
+  if (angle > 90 - 45 && angle < 90 + 45) {
+    return "top";
+  } else if (angle > 180 - 45 && angle < 180 + 45) {
+    return "left";
+  } else if (angle > 270 - 45 && angle < 270 + 45) {
+    return "bottom";
+  } else if (angle < 45 || angle > 270 + 45) {
+    return "right";
+  } else if (angle === 90 - 45) {
+    return "topright";
+  } else if (angle === 90 + 45) {
+    return "topleft";
+  } else if (angle === 270 - 45) {
+    return "bottomleft";
+  } else if (angle === 270 + 45) {
+    return "bottomright";
+  }
+}
+
+function updateDxDyAngle(side, dx, dy) {
+  switch (side) {
+    case "top":
+      return [dx, negative(dy)];
+    case "bottom":
+      return [dx, positive(dy)];
+    case "right":
+      return [positive(dx), dy];
+    case "left":
+      return [negative(dx), dy];
+    case "topright":
+      return [positive(dx), negative(dy)];
+    case "topleft":
+      return [negative(dx), negative(dy)];
+    case "bottomright":
+      return [positive(dx), positive(dy)];
+    case "bottomleft":
+      return [negative(dx), positive(dy)];
+
+    default:
+      return [dx, dy];
+  }
+}
+
+function updateOnCollison(ball, box) {
+  if (
+    !circleAwayFromSquare(ball.x, ball.y, ball.radius, box.x, box.y, box.length)
+  ) {
+    let angle, side;
+
+    angle = getAngleInDegrees(
+      box.x + box.length / 2,
+      box.y + box.length / 2,
+      ball.x,
+      ball.y
+    );
+    side = getSideOfCollision(angle);
+
+    [ball.dx, ball.dy] = updateDxDyAngle(side, ball.dx, ball.dy);
+
+    if (ball.dx < 10) {
+      ball.dx = 1.05 * ball.dx;
+      ball.dy = 1.05 * ball.dy;
+      box.setDx(positive(2 * ball.dx));
+    }
+    increaseScore();
+  }
+}
+
 size = 50;
 gap = 6;
 squareArray = CreateSquareArray(size, gap);
