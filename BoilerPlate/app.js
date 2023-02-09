@@ -362,11 +362,7 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: undefined, y: undefined };
-let squareX, squareY, circleX, circleY, cColor, sColor, length, breadth, radius;
-squareX = middleX();
-squareY = middleY();
-sColor = "green";
-cColor = "red";
+
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
@@ -396,6 +392,7 @@ class Ball {
     this.lineColor = lineColor;
     this.lineWidth = lineWidth;
 
+    this.friction = 0.9;
     this.getRandomSpeed();
   }
 
@@ -407,7 +404,7 @@ class Ball {
     }
 
     if (this.y + this.radius >= canvas.height) {
-      this.dy = negative(this.dy);
+      this.dy = this.friction * negative(this.dy);
     } else if (this.y - this.radius <= 0) {
       this.dy = positive(this.dy);
     }

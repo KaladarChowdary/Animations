@@ -361,14 +361,12 @@ function circleAwayFromRectangle(cX, cY, cR, x2, y2, length2, breadth2) {
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
-let mouse = { x: middleX(), y: middleY() };
-let Cooridnates, squareArray, size, gap, square;
-let mouseOnCanvas, scolor, pcolor, ball, ballcolor;
-mouseOnCanvas = false;
-scolor = "white";
-pcolor = "red";
-ballcolor = "green";
-
+let mouse = { x: undefined, y: undefined };
+let squareX, squareY, circleX, circleY, cColor, sColor, length, breadth, radius;
+squareX = middleX();
+squareY = middleY();
+sColor = "green";
+cColor = "red";
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
@@ -378,63 +376,27 @@ window.addEventListener("mousemove", function (evt) {
 
 window.addEventListener("resize", function () {
   maxify();
-
-  squareArray = CreateSquareArray(size, gap);
-});
-
-canvas.addEventListener("mouseenter", function () {
-  mouseOnCanvas = true;
-});
-
-canvas.addEventListener("mouseleave", function () {
-  mouseOnCanvas = false;
 });
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
 class Ball {
-  constructor(x = middleX(), y = middleY(), radius = 20, color = ballcolor) {
+  constructor(
+    x = middleX(),
+    y = middleY(),
+    radius = 10,
+    fillColor = "white",
+    lineColor = "white",
+    lineWidth = 1
+  ) {
     this.x = x;
     this.y = y;
     this.radius = radius;
-    this.color = color;
+    this.fillColor = fillColor;
+    this.lineColor = lineColor;
+    this.lineWidth = lineWidth;
+
     this.getRandomSpeed();
-
-    this.current = false;
-  }
-
-  ballNotHereBefore(square) {
-    return circleAwayFromSquare(
-      this.x - this.dx,
-      this.y - this.dy,
-      this.radius,
-      square.x,
-      square.y,
-      square.length
-    );
-  }
-
-  reactToSolid() {
-    this.color = "green";
-    for (let sqr of squareArray) {
-      if (sqr.solid) {
-        if (
-          !circleAwayFromSquare(
-            this.x,
-            this.y,
-            this.radius,
-            sqr.x,
-            sqr.y,
-            sqr.length
-          )
-        ) {
-          if (this.ballNotHereBefore(sqr)) {
-            this.color = "black";
-            updateOnCollison(this, sqr);
-          }
-        }
-      }
-    }
   }
 
   bounceOffCanvasBorders() {
@@ -458,18 +420,24 @@ class Ball {
   }
 
   getRandomSpeed() {
-    this.dx = randomSign() * randRange(1, 2);
-    this.dy = randomSign() * randRange(1, 2);
+    this.dx = randRange(1, 3);
+    this.dy = randRange(1, 3);
   }
 
   update() {
-    this.reactToSolid();
     this.updateXY();
     this.draw();
   }
 
   draw() {
-    drawBall(this.x, this.y, this.radius, this.color);
+    drawBall(
+      this.x,
+      this.y,
+      this.radius,
+      this.fillColor,
+      this.lineColor,
+      this.lineWidth
+    );
   }
 }
 
@@ -510,131 +478,47 @@ class Rectangle {
 }
 
 class Square {
-  constructor(x = middleX(), y = middleY(), length = 100, color = "white") {
+  constructor(
+    x = middleX(),
+    y = middleY(),
+    length = 100,
+    fillColor = "white",
+    lineColor = "white",
+    lineWidth = 1
+  ) {
     this.x = x;
     this.y = y;
     this.length = length;
-    this.color = color;
-    this.solid = false;
-  }
-
-  reactToMouse() {
-    if (this.isMouseInside()) {
-      this.solid = true;
-      this.color = pcolor;
-    } else {
-      this.solid = false;
-      this.color = scolor;
-    }
-  }
-
-  isMouseInside() {
-    if (mouseOnCanvas) {
-      return isPointInsideSquare(mouse.x, mouse.y, this.x, this.y, this.length);
-    } else {
-      this.solid = false;
-      return false;
-    }
+    this.fillColor = fillColor;
+    this.lineColor = lineColor;
+    this.lineWidth = lineWidth;
   }
 
   update() {
-    this.reactToMouse();
     this.draw();
   }
 
   draw() {
-    fillRectangle(this.x, this.y, this.length, this.length, this.color);
+    fillRectangle(
+      this.x,
+      this.y,
+      this.length,
+      this.length,
+      this.fillColor,
+      this.lineColor,
+      this.lineWidth
+    );
   }
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-function CreateSquareArray(size = 10, gap = 3) {
-  Cooridnates = giveCoordinatesArray(size, gap);
-  arr = [];
-  for (let [x, y] of Cooridnates) {
-    arr.push(new Square(x, y, size, scolor));
-  }
-
-  return arr;
-}
-
-function getSideOfCollision(angle) {
-  angle = Math.trunc(angle);
-  if (angle > 90 - 45 && angle < 90 + 45) {
-    return "top";
-  } else if (angle > 180 - 45 && angle < 180 + 45) {
-    return "left";
-  } else if (angle > 270 - 45 && angle < 270 + 45) {
-    return "bottom";
-  } else if (angle < 45 || angle > 270 + 45) {
-    return "right";
-  } else if (angle === 90 - 45) {
-    return "topright";
-  } else if (angle === 90 + 45) {
-    return "topleft";
-  } else if (angle === 270 - 45) {
-    return "bottomleft";
-  } else if (angle === 270 + 45) {
-    return "bottomright";
-  }
-}
-
-function updateDxDyAngle(side, dx, dy) {
-  switch (side) {
-    case "top":
-      return [dx, negative(dy)];
-    case "bottom":
-      return [dx, positive(dy)];
-    case "right":
-      return [positive(dx), dy];
-    case "left":
-      return [negative(dx), dy];
-    case "topright":
-      return [positive(dx), negative(dy)];
-    case "topleft":
-      return [negative(dx), negative(dy)];
-    case "bottomright":
-      return [positive(dx), positive(dy)];
-    case "bottomleft":
-      return [negative(dx), positive(dy)];
-
-    default:
-      return [dx, dy];
-  }
-}
-
-function updateOnCollison(ball, box) {
-  if (
-    !circleAwayFromSquare(ball.x, ball.y, ball.radius, box.x, box.y, box.length)
-  ) {
-    let angle, side;
-
-    angle = getAngleInDegrees(
-      box.x + box.length / 2,
-      box.y + box.length / 2,
-      ball.x,
-      ball.y
-    );
-
-    side = getSideOfCollision(angle);
-
-    [ball.dx, ball.dy] = updateDxDyAngle(side, ball.dx, ball.dy);
-  }
-}
-
-size = 50;
-gap = 6;
-squareArray = CreateSquareArray(size, gap);
-
-ball = new Ball();
-
+let temp = new Ball();
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  updateArray(squareArray);
-  ball.update();
+  temp.update();
 }
 animate();
