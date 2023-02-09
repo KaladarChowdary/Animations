@@ -406,13 +406,22 @@ class Ball {
     this.getRandomSpeed();
   }
 
-  reactToSolid(){
-    for(let square of squareArray){
-      if(square.solid){
-        if(! circleAwayFromSquare(this.x, this.y, this.radius, square.x,square.y, square.length))
-
-      }else{
-
+  reactToSolid() {
+    this.color = ballcolor;
+    for (let square of squareArray) {
+      if (square.solid) {
+        if (
+          !circleAwayFromSquare(
+            this.x,
+            this.y,
+            this.radius,
+            square.x,
+            square.y,
+            square.length
+          )
+        ) {
+          this.color = "pink";
+        }
       }
     }
   }
@@ -444,6 +453,7 @@ class Ball {
 
   update() {
     this.updateXY();
+    this.reactToSolid();
     this.draw();
   }
 
