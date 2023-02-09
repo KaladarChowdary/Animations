@@ -363,11 +363,11 @@ const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: middleX(), y: middleY() };
 let Cooridnates, squareArray, size, gap, square;
-let mouseOnCanvas, scolor, pcolor, ballcolor;
+let mouseOnCanvas, scolor, pcolor, ball, ballcolor;
 mouseOnCanvas = false;
 scolor = "white";
-pcolor = "green";
-ballcolor = "red";
+pcolor = "red";
+ballcolor = "green";
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
@@ -396,19 +396,25 @@ class Ball {
   constructor(
     x = middleX(),
     y = middleY(),
-    radius = 10,
-    fillColor = "white",
-    lineColor = "white",
-    lineWidth = 1
+    radius = 20,
+    fillColor = ballcolor
   ) {
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.fillColor = fillColor;
-    this.lineColor = lineColor;
-    this.lineWidth = lineWidth;
-
     this.getRandomSpeed();
+  }
+
+  reactToSolid(){
+    for(let square of squareArray){
+      if(square.solid){
+        if(! circleAwayFromSquare(this.x, this.y, this.radius, square.x,square.y, square.length))
+
+      }else{
+
+      }
+    }
   }
 
   bounceOffCanvasBorders() {
@@ -432,8 +438,8 @@ class Ball {
   }
 
   getRandomSpeed() {
-    this.dx = randRange(1, 3);
-    this.dy = randRange(1, 3);
+    this.dx = randomSign() * randRange(1, 2);
+    this.dy = randomSign() * randRange(1, 2);
   }
 
   update() {
@@ -442,14 +448,7 @@ class Ball {
   }
 
   draw() {
-    drawBall(
-      this.x,
-      this.y,
-      this.radius,
-      this.fillColor,
-      this.lineColor,
-      this.lineWidth
-    );
+    drawBall(this.x, this.y, this.radius, this.fillColor);
   }
 }
 
@@ -507,8 +506,10 @@ class Square {
 
   isMouseInside() {
     if (mouseOnCanvas) {
+      this.solid = true;
       return isPointInsideSquare(mouse.x, mouse.y, this.x, this.y, this.length);
     } else {
+      this.solid = false;
       return false;
     }
   }
@@ -526,9 +527,6 @@ class Square {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-size = 15;
-gap = 6;
-
 function CreateSquareArray(size = 10, gap = 3) {
   Cooridnates = giveCoordinatesArray(size, gap);
   arr = [];
@@ -538,13 +536,17 @@ function CreateSquareArray(size = 10, gap = 3) {
 
   return arr;
 }
-
+size = 20;
+gap = 6;
 squareArray = CreateSquareArray(size, gap);
+
+ball = new Ball();
 
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
   updateArray(squareArray);
+  ball.update();
 }
 animate();
