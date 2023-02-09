@@ -385,18 +385,27 @@ class Ball {
     x = middleX(),
     y = middleY(),
     radius = 10,
-    fillColor = "white",
-    lineColor = "white",
-    lineWidth = 1
+    color = "white",
+
+    dx = 1,
+    dy = 1,
+    a = 1,
+    loss = 0.8
   ) {
     this.x = x;
     this.y = y;
     this.radius = radius;
-    this.fillColor = fillColor;
-    this.lineColor = lineColor;
-    this.lineWidth = lineWidth;
+    this.color = color;
 
-    this.getRandomSpeed();
+    this.dx = dx;
+    this.dy = dy;
+    this.a = a;
+
+    this.loss = loss;
+  }
+
+  accelarate() {
+    this.dy += this.a;
   }
 
   bounceOffCanvasBorders() {
@@ -407,16 +416,21 @@ class Ball {
     }
 
     if (this.y + this.radius >= canvas.height) {
-      this.dy = negative(this.dy);
+      this.dy = this.loss * negative(this.dy);
     } else if (this.y - this.radius <= 0) {
       this.dy = positive(this.dy);
     }
   }
 
   updateXY() {
-    this.bounceOffCanvasBorders();
+    console.log(1, this.dy);
+    this.accelarate();
+    console.log(2, this.dy);
     this.x += this.dx;
     this.y += this.dy;
+    this.y = Math.min(canvas.height - this.radius, this.y);
+    this.bounceOffCanvasBorders();
+    console.log(3, this.dy);
   }
 
   getRandomSpeed() {
@@ -430,86 +444,79 @@ class Ball {
   }
 
   draw() {
-    drawBall(
-      this.x,
-      this.y,
-      this.radius,
-      this.fillColor,
-      this.lineColor,
-      this.lineWidth
-    );
+    drawBall(this.x, this.y, this.radius, this.color, this.color);
   }
 }
 
-class Rectangle {
-  constructor(
-    x = middleX(),
-    y = middleY(),
-    length = 100,
-    breadth = 50,
-    fillColor = "white",
-    lineColor = "white",
-    lineWidth = 1
-  ) {
-    this.x = x;
-    this.y = y;
-    this.length = length;
-    this.breadth = breadth;
-    this.fillColor = fillColor;
-    this.lineColor = lineColor;
-    this.lineWidth = lineWidth;
-  }
+// class Rectangle {
+//   constructor(
+//     x = middleX(),
+//     y = middleY(),
+//     length = 100,
+//     breadth = 50,
+//     fillColor = "white",
+//     lineColor = "white",
+//     lineWidth = 1
+//   ) {
+//     this.x = x;
+//     this.y = y;
+//     this.length = length;
+//     this.breadth = breadth;
+//     this.fillColor = fillColor;
+//     this.lineColor = lineColor;
+//     this.lineWidth = lineWidth;
+//   }
 
-  update() {
-    this.draw();
-  }
+//   update() {
+//     this.draw();
+//   }
 
-  draw() {
-    fillRectangle(
-      this.x,
-      this.y,
-      this.length,
-      this.breadth,
-      this.fillColor,
-      this.lineColor,
-      this.lineWidth
-    );
-  }
-}
+//   draw() {
+//     fillRectangle(
+//       this.x,
+//       this.y,
+//       this.length,
+//       this.breadth,
+//       this.fillColor,
+//       this.lineColor,
+//       this.lineWidth
+//     );
+//   }
+// }
 
-class Square {
-  constructor(
-    x = middleX(),
-    y = middleY(),
-    length = 100,
-    fillColor = "white",
-    lineColor = "white",
-    lineWidth = 1
-  ) {
-    this.x = x;
-    this.y = y;
-    this.length = length;
-    this.fillColor = fillColor;
-    this.lineColor = lineColor;
-    this.lineWidth = lineWidth;
-  }
+// class Square {
+//   constructor(
+//     x = middleX(),
+//     y = middleY(),
+//     length = 100,
+//     fillColor = "white",
+//     lineColor = "white",
+//     lineWidth = 1
+//   ) {
+//     this.x = x;
+//     this.y = y;
+//     this.length = length;
+//     this.fillColor = fillColor;
+//     this.lineColor = lineColor;
+//     this.lineWidth = lineWidth;
+//   }
 
-  update() {
-    this.draw();
-  }
+//   update() {
+//     this.draw();
+//   }
 
-  draw() {
-    fillRectangle(
-      this.x,
-      this.y,
-      this.length,
-      this.length,
-      this.fillColor,
-      this.lineColor,
-      this.lineWidth
-    );
-  }
-}
+//   draw() {
+//     fillRectangle(
+//       this.x,
+//       this.y,
+//       this.length,
+//       this.length,
+//       this.fillColor,
+//       this.lineColor,
+//       this.lineWidth
+//     );
+//   }
+// }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
