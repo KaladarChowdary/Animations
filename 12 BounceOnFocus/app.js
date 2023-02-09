@@ -429,8 +429,8 @@ class Ball {
           )
         ) {
           if (this.ballNotHereBefore(sqr)) {
-            console.log("strike");
             this.color = "black";
+            updateOnCollison(this, sqr);
           }
         }
       }
@@ -617,16 +617,10 @@ function updateOnCollison(ball, box) {
       ball.x,
       ball.y
     );
+
     side = getSideOfCollision(angle);
 
     [ball.dx, ball.dy] = updateDxDyAngle(side, ball.dx, ball.dy);
-
-    if (ball.dx < 10) {
-      ball.dx = 1.05 * ball.dx;
-      ball.dy = 1.05 * ball.dy;
-      box.setDx(positive(2 * ball.dx));
-    }
-    increaseScore();
   }
 }
 
