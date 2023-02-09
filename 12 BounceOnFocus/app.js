@@ -407,7 +407,8 @@ class Ball {
   }
 
   reactToSolid() {
-    this.color = ballcolor;
+    this.fillColor = ballcolor;
+
     for (let square of squareArray) {
       if (square.solid) {
         if (
@@ -420,7 +421,8 @@ class Ball {
             square.length
           )
         ) {
-          this.color = "pink";
+          square.color = "blue";
+          this.fillColor = "yellow";
         }
       }
     }
