@@ -393,39 +393,12 @@ canvas.addEventListener("mouseleave", function () {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
 class Ball {
-  constructor(
-    x = middleX(),
-    y = middleY(),
-    radius = 20,
-    fillColor = ballcolor
-  ) {
+  constructor(x = middleX(), y = middleY(), radius = 20, color = ballcolor) {
     this.x = x;
     this.y = y;
     this.radius = radius;
-    this.fillColor = fillColor;
+    this.color = color;
     this.getRandomSpeed();
-  }
-
-  reactToSolid() {
-    this.fillColor = ballcolor;
-
-    for (let square of squareArray) {
-      if (square.solid) {
-        if (
-          !circleAwayFromSquare(
-            this.x,
-            this.y,
-            this.radius,
-            square.x,
-            square.y,
-            square.length
-          )
-        ) {
-          square.color = "blue";
-          this.fillColor = "yellow";
-        }
-      }
-    }
   }
 
   bounceOffCanvasBorders() {
@@ -455,12 +428,11 @@ class Ball {
 
   update() {
     this.updateXY();
-    this.reactToSolid();
     this.draw();
   }
 
   draw() {
-    drawBall(this.x, this.y, this.radius, this.fillColor);
+    drawBall(this.x, this.y, this.radius, this.color);
   }
 }
 
@@ -506,19 +478,21 @@ class Square {
     this.y = y;
     this.length = length;
     this.color = color;
+    this.solid = false;
   }
 
   reactToMouse() {
     if (this.isMouseInside()) {
+      this.solid = true;
       this.color = pcolor;
     } else {
+      this.solid = false;
       this.color = scolor;
     }
   }
 
   isMouseInside() {
     if (mouseOnCanvas) {
-      this.solid = true;
       return isPointInsideSquare(mouse.x, mouse.y, this.x, this.y, this.length);
     } else {
       this.solid = false;
@@ -560,5 +534,23 @@ function animate() {
 
   updateArray(squareArray);
   ball.update();
+
+  ball.color = "green";
+  for (let sq of squareArray) {
+    if (sq.solid) {
+      if (
+        !circleAwayFromSquare(
+          ball.x,
+          ball.y,
+          ball.radius,
+          sq.x,
+          sq.y,
+          sq.length
+        )
+      ) {
+        ball.color = "pink";
+      }
+    }
+  }
 }
 animate();
