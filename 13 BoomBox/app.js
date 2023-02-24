@@ -528,7 +528,7 @@ function createBallArray(n) {
     dy = randomSign() * randRange(1, 2);
 
     a = randRange(0.5, 1);
-    friction = randRange(0.5, 1);
+    friction = randRange(0.7, 0.9);
 
     arr.push(new Ball(x, y, radius, color, dx, dy, a, friction));
   }
