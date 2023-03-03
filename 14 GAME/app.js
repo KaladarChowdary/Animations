@@ -362,11 +362,7 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 maxify();
 let mouse = { x: undefined, y: undefined };
-let squareX, squareY, circleX, circleY, cColor, sColor, length, breadth, radius;
-squareX = middleX();
-squareY = middleY();
-sColor = "green";
-cColor = "red";
+
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EVENT LISTENERS
 window.addEventListener("mousemove", function (evt) {
@@ -381,63 +377,25 @@ window.addEventListener("resize", function () {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CLASSES
 class Ball {
-  constructor(
-    x = middleX(),
-    y = middleY(),
-    radius = 10,
-    fillColor = "white",
-    lineColor = "white",
-    lineWidth = 1
-  ) {
+  constructor(x = middleX(), y = middleY(), radius = 30, fillColor = "white") {
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.fillColor = fillColor;
-    this.lineColor = lineColor;
-    this.lineWidth = lineWidth;
-
-    this.getRandomSpeed();
   }
 
-  bounceOffCanvasBorders() {
-    if (this.x + this.radius >= canvas.width) {
-      this.dx = negative(this.dx);
-    } else if (this.x - this.radius <= 0) {
-      this.dx = positive(this.dx);
-    }
-
-    if (this.y + this.radius >= canvas.height) {
-      this.dy = negative(this.dy);
-    } else if (this.y - this.radius <= 0) {
-      this.dy = positive(this.dy);
-    }
-  }
-
-  updateXY() {
-    this.bounceOffCanvasBorders();
-    this.x += this.dx;
-    this.y += this.dy;
-  }
-
-  getRandomSpeed() {
-    this.dx = randRange(1, 3);
-    this.dy = randRange(1, 3);
+  followMouse() {
+    this.x = mouse.x;
+    this.y = mouse.y;
   }
 
   update() {
-    this.updateXY();
+    this.followMouse();
     this.draw();
   }
 
   draw() {
-    drawBall(
-      this.x,
-      this.y,
-      this.radius,
-      this.fillColor,
-      this.lineColor,
-      this.lineWidth
-    );
+    drawBall(this.x, this.y, this.radius, this.fillColor, this.fillColor, 1);
   }
 }
 
@@ -514,11 +472,13 @@ class Square {
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-let temp = new Ball();
+let bColor = "red";
+let rColor = "green";
+let ball = new Ball(middleX(), middleY(), 30, bColor);
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
-  temp.update();
+  ball.update();
 }
 animate();
