@@ -382,6 +382,16 @@ class Ball {
     this.y = y;
     this.radius = radius;
     this.fillColor = fillColor;
+
+    this.getRandomSpeed();
+  }
+
+  collideBorders() {
+    if (this.x + this.radius >= canvas.width) this.dx = negative(this.dx);
+    if (this.x - this.radius <= 0) this.dx = positive(this.dx);
+
+    if (this.y + this.radius >= canvas.height) this.dy = negative(this.dy);
+    if (this.y - this.radius <= 0) this.dy = positive(this.dy);
   }
 
   followMouse() {
@@ -389,8 +399,19 @@ class Ball {
     this.y = mouse.y;
   }
 
+  getRandomSpeed() {
+    this.dx = randomSign() * randRange(1, 3);
+    this.dy = randomSign() * randRange(1, 3);
+  }
+
+  addSpeed() {
+    this.x += this.dx;
+    this.y += this.dy;
+  }
+
   update() {
-    this.followMouse();
+    this.collideBorders();
+    this.addSpeed();
     this.draw();
   }
 
@@ -462,5 +483,21 @@ function animate() {
 
   rect.update();
   ball.update();
+
+  if (
+    circleAwayFromRectangle(
+      ball.x,
+      ball.y,
+      ball.radius,
+      rect.x,
+      rect.y,
+      rect.length,
+      rect.breadth
+    )
+  ) {
+    ball.fillColor = rColor;
+  } else {
+    ball.fillColor = bColor;
+  }
 }
 animate();
