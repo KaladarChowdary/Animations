@@ -405,9 +405,9 @@ class Rectangle {
     y = middleY(),
     length = 100,
     breadth = 50,
-    fillColor = "white",
+    fillColor = "green",
     lineColor = "white",
-    lineWidth = 1
+    lineWidth = 2
   ) {
     this.x = x;
     this.y = y;
@@ -435,50 +435,32 @@ class Rectangle {
   }
 }
 
-class Square {
-  constructor(
-    x = middleX(),
-    y = middleY(),
-    length = 100,
-    fillColor = "white",
-    lineColor = "white",
-    lineWidth = 1
-  ) {
-    this.x = x;
-    this.y = y;
-    this.length = length;
-    this.fillColor = fillColor;
-    this.lineColor = lineColor;
-    this.lineWidth = lineWidth;
-  }
-
-  update() {
-    this.draw();
-  }
-
-  draw() {
-    fillRectangle(
-      this.x,
-      this.y,
-      this.length,
-      this.length,
-      this.fillColor,
-      this.lineColor,
-      this.lineWidth
-    );
-  }
-}
-
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // ANIMATE
 
-let bColor = "red";
-let rColor = "green";
-let ball = new Ball(middleX(), middleY(), 30, bColor);
+let bX, bY, bR, bColor;
+let rX, rY, rLength, rWidth, rColor, rLColor, rLWidth;
+
+bX = middleX();
+bY = middleY();
+bR = 30;
+bColor = "red";
+
+rX = middleX() - 100;
+rY = middleY() - 50;
+rLength = 200;
+rWidth = 100;
+rColor = "green";
+rLColor = "white";
+rLWidth = 2;
+
+let ball = new Ball(bX, bY, bR, bColor);
+let rect = new Rectangle(rX, rY, rLength, rWidth, rColor, rLColor, rLWidth);
 function animate() {
   requestAnimationFrame(animate);
   fillCanvas("black");
 
+  rect.update();
   ball.update();
 }
 animate();
